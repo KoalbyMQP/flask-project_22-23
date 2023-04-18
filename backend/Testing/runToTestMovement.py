@@ -1,5 +1,4 @@
 import sys
-
 from backend.KoalbyHumaniod.Robot import RealRobot
 from backend.Primitives.MovementManager import play_motion
 from backend.Simulation import sim as vrep
