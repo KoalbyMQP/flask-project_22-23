@@ -9,6 +9,9 @@ from collections import namedtuple
 This module can be used to compute the forward and inverse kinematics for a chain of revolute joints.
 It has been largerly inspired by the Matlab Robotics Toolbox.
 
+THE KINEMATICS MAY NEED A LOT OF WORK, BE WARY IF THINGS DON'T LOOK RIGHT, IT COULD BE CODE IF YOU THINK IT'S SOMETHING
+WRONG WITH THE ACTUAL ROBOT
+
 """
 
 
@@ -121,14 +124,14 @@ class Chain(namedtuple('Chain', ('links', 'base', 'tool'))):
 
         return q
 
-    def _jacob0(self, q):  # UNUSED
+    def _jacob0(self, q):  # UNUSED, left from a previous team
         Jn = self._jacobn(q)
         Rn = rotation_from_transf(self.forward_kinematics(q)[0])
 
         return numpy.concatenate((numpy.concatenate((Rn, numpy.zeros((3, 3))), axis=1),
                                   numpy.concatenate((numpy.zeros((3, 3)), Rn), 1))) * Jn
 
-    def _jacobn(self, q):  # UNUSED
+    def _jacobn(self, q):  # UNUSED, left from a previous team
         q = numpy.array(q).flatten()
         U = self.tool.copy()
         J = numpy.matrix([[]] * 6)

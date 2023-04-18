@@ -2,9 +2,8 @@ import csv
 import sys
 
 from backend.KoalbyHumaniod.Kinematics.TrajectoryPlanning import TrajPlanner
-from backend.KoalbyHumaniod.Robot import SimRobot, RealRobot
+from backend.KoalbyHumaniod.Robot import RealRobot
 from backend.Primitives.MovementManager import play_motion_kinematics
-from backend.Simulation import sim as vrep
 
 
 class Walker:
@@ -15,22 +14,6 @@ class Walker:
         self.keys = None
         self.right_leg_positions = None
         self.left_leg_positions = None
-
-    def init_sim(self):
-
-        vrep.simxFinish(-1)  # just in case, close all opened connections
-        self.client_id = vrep.simxStart('127.0.0.1', 19999, True, True, 5000, 5)
-        if self.client_id != -1:  # TODO: Fix duplicate code
-            print("Connected to remote API server")
-        else:
-            sys.exit("Not connected to remote API server")
-
-    # def toggle(self, filename, leg_choice, tf, robot):
-    #     if self.is_walking:
-    #         self.is_walking = False
-    #     else:
-    #         self.is_walking = True
-    #         self.play(filename, leg_choice, tf, robot)
 
     def init_walk(self, leg_choice):
         self.right_leg_positions = []
@@ -89,16 +72,9 @@ class Walker:
 
 
 if __name__ == "__main__":
-    sim_flag = float(input("Are you running the simulation? Type 1 for yes and 0 otherwise"))
     walker = Walker()
-    if sim_flag == 1:
-        walker.init_sim()
-        robot = SimRobot(walker.client_id)
-        handle = vrep.simxGetObjectHandle(walker.client_id, 'Cuboid0', vrep.simx_opmode_blocking)[1]
-        vrep.simxSetObjectFloatParameter(walker.client_id, handle, vrep.sim_shapefloatparam_mass, 5,
-                                         vrep.simx_opmode_blocking)
-    else:
-        robot = RealRobot()
+
+    robot = RealRobot()
 
     trajPlanner = TrajPlanner()
     replay_filename = str(input("Input saved file name to play back:"))

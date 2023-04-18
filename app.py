@@ -6,11 +6,11 @@ from flask import Flask, Response, request
 from flask import render_template
 from serial import SerialException
 
-from backend.KoalbyHumaniod.Robot import RealRobot, SimRobot
+from backend.KoalbyHumaniod.Robot import RealRobot
 from backend.KoalbyHumaniod.Sensors.sensorData import SensorData
 from backend.Primitives import MovementManager
-from backend.Simulation import sim as vrep
 from backend.Testing.runToTestWalk import Walker
+
 
 app = Flask(__name__)
 
@@ -57,39 +57,6 @@ def shutdown():
     global robot
     robot.shutdown()  # works
     return Response("1", mimetype="text/xml")
-
-
-@app.route("/init-simulation")
-def init_simulation():
-    """
-    Initializes simulation when Simulation button is pressed from UI
-    IMPORTANT: In order for this to work, the simulation needs to be running
-    :return: 0 if not connected to simulation, 1 if connected
-    """
-    global robot
-    global sensor_data
-    sensor_data = SensorData()
-    global client_id
-    global walker
-    walker = Walker()
-    walker.init_walk(1)  # 1 is leg choice. Not giving this choice to the user
-
-    # TODO: this is duplicated lots of places
-    vrep.simxFinish(-1)  # just in case, close all opened connections
-    client_id = vrep.simxStart('127.0.0.1', 19999, True, True, 5000, 5)
-    print(client_id)  # if 1, then we are connected.
-    if client_id != -1:
-        print("Connected to remote API server")
-    else:
-        # sys.exit("Not connected to remote API server")
-        print("not connected")
-        return Response("0", mimetype="text/xml")
-
-    robot = SimRobot(client_id)
-    print("robot should be created")
-    sensor_data.init_robot(robot)
-    return Response("1", mimetype="text/xml")
-
 
 @app.route("/home/")
 def home():

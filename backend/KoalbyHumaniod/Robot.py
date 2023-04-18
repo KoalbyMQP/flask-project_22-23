@@ -3,8 +3,7 @@ from abc import ABC, abstractmethod
 
 import backend.KoalbyHumaniod.Config as Config
 from backend.ArduinoSerial import ArduinoSerial
-from backend.KoalbyHumaniod.Motor import RealMotor, SimMotor
-from backend.Simulation import sim as vrep
+from backend.KoalbyHumaniod.Motor import RealMotor
 from backend.KoalbyHumaniod.Sensors.PiratedCode import Kalman_EKF as KM
 
 
@@ -69,78 +68,6 @@ class Robot(ABC):
         pass
 
     @abstractmethod
-    def stop_hand(self):
-        pass
-
-
-class SimRobot(Robot):
-    def __init__(self, client_id):
-        self.client_id = client_id
-        self.motors = self.motors_init()
-        super().__init__(False, self.motors)
-        self.primitives = []
-        self.is_real = False
-
-        # print(client_id)
-
-    def motors_init(self):
-        motors = list()
-        for motorConfig in Config.motors:
-            # handle = vrep.simxGetObjectHandle(self.client_id, motorConfig[3], vrep.simx_opmode_blocking)[1]
-            # print(self.client_id)
-            vrep.simxSetObjectFloatParameter(self.client_id, vrep.simxGetObjectHandle(self.client_id, motorConfig[3],
-                                                                                      vrep.simx_opmode_blocking)[1],
-                                             vrep.sim_shapefloatparam_mass, 1,
-                                             vrep.simx_opmode_blocking)
-            motor = SimMotor(motorConfig[0],
-                             vrep.simxGetObjectHandle(self.client_id, motorConfig[3], vrep.simx_opmode_blocking)[1])
-            setattr(SimRobot, motorConfig[3], motor)
-            motors.append(motor)
-        return motors
-
-    def update_motors(self, pose_time_millis, motor_positions_dict):
-        """
-        Take the primitiveMotorDict and send the motor values to the robot
-        """
-
-        for key, value in motor_positions_dict.items():
-            for motor in self.motors:
-                if str(motor.motor_id) == str(key):
-                    motor.set_position(value, self.client_id)
-
-    def shutdown(self):
-        vrep.simxStopSimulation(self.client_id, vrep.simx_opmode_oneshot)
-
-    def get_imu_data(self):
-        data = [vrep.simxGetFloatSignal(self.client_id, "gyroX", vrep.simx_opmode_streaming)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "gyroY", vrep.simx_opmode_streaming)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "gyroZ", vrep.simx_opmode_streaming)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "accelerometerX", vrep.simx_opmode_streaming)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "accelerometerY", vrep.simx_opmode_streaming)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "accelerometerZ", vrep.simx_opmode_streaming)[1] + .001, 1, 1,
-                1]
-        # have to append 1 for magnetometer data because there isn't one in CoppeliaSim
-        return data
-
-    def read_battery_level(self):
-        return 2
-
-    def get_tf_luna_data(self):
-        # dist = float(vrep.simxGetFloatSignal(self.client_id, "proximity", vrep.simx_opmode_streaming)[1])
-        # print(dist)
-        # if dist > 5:
-        #     print("stop")
-        return 6
-
-    def get_husky_lens_data(self):
-        return 3
-
-    def open_hand(self):
-        pass
-
-    def close_hand(self):
-        pass
-
     def stop_hand(self):
         pass
 

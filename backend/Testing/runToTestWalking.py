@@ -2,9 +2,9 @@ import csv
 import sys
 
 from backend.KoalbyHumaniod.Kinematics.TrajectoryPlanning import TrajPlanner
-from backend.KoalbyHumaniod.Robot import SimRobot
+from backend.KoalbyHumaniod.Robot import SimRobot, Robot
 from backend.Primitives.MovementManager import play_motion_kinematics
-from backend.Simulation import sim as vrep
+from backend.simulation import sim as vrep
 
 
 class Walker:
@@ -48,14 +48,14 @@ class Walker:
                 # opens pre-generated CSV file and creates a list of trajectory positions for each leg,
                 # one for when the leg is stepping and one for when the leg isn't stepping, for both legs
                 with open(
-                        "/Users/caseysnow/Desktop/MQP/flask-project/backend/Primitives/poses/walk") as f: # left leg taking step
+                        "C:/Users/josh3/Documents/GitHub/flask-project/backend/Primitives/poses/leftWalk") as f: # left leg taking step
                     csvRecordedPoses = [{k: int(v) for k, v in row.items()}
                                         for row in
                                         csv.DictReader(f,
                                                        skipinitialspace=True)]  # parses selected csv file into list of poses
             if numTimes == 1:
                 with open(
-                        "/Users/caseysnow/Desktop/MQP/flask-project/backend/Primitives/poses/walk") as f: # right leg taking step
+                        "C:/Users/josh3/Documents/GitHub/flask-project/backend/Primitives/poses/rightWalk") as f: # right leg taking step
                     csvRecordedPoses = [{k: int(v) for k, v in row.items()}
                                         for row in
                                         csv.DictReader(f,
@@ -101,7 +101,7 @@ class Walker:
         vf = 0  # final velocity set to 0
 
         while self.isWalking:  # while the robot is walking
-            print("New Step")
+            # print("New Step")
             iterateThroughThis = trajPlanner.execute_cubic_traj(positionList, keys, t0, tf, v0, vf)  # positions for one leg to iterate through
             iterateThroughThis2 = trajPlanner.execute_cubic_traj(positionList2, keys2, t0, tf, v0, vf)  # positions for other leg to iterate through
             iterateThroughThisFinal = []
@@ -130,11 +130,15 @@ class Walker:
 
 if __name__ == "__main__":
     walker = Walker(True)
-    walker.init_sim()  # initializes the robot in simulation
-    robot = SimRobot(walker.client_id)
-    handle = vrep.simxGetObjectHandle(walker.client_id, 'Cuboid0', vrep.simx_opmode_blocking)[1]
-    vrep.simxSetObjectFloatParameter(walker.client_id, handle, vrep.sim_shapefloatparam_mass, 5,  # gives sim cart a mass of 5 (unsure of units)
-                                     vrep.simx_opmode_blocking)
+    simFlag = float(input("Enter 1 if in simulation or two if in real-world:"))
+    if simFlag == 2:
+        robot = Robot(walker.client_id)
+    else:
+        walker.init_sim()  # initializes the robot in simulation
+        robot = SimRobot(walker.client_id)
+        handle = vrep.simxGetObjectHandle(walker.client_id, 'Cuboid0', vrep.simx_opmode_blocking)[1]
+        vrep.simxSetObjectFloatParameter(walker.client_id, handle, vrep.sim_shapefloatparam_mass, 5,  # gives sim cart a mass of 5 (unsure of units)
+                                         vrep.simx_opmode_blocking)
 
     trajPlanner = TrajPlanner()  # init instance of trajectory planner
     legChoice = float(input("Enter 1 to move left leg or 2 to move right leg:"))

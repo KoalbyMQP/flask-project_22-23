@@ -4,10 +4,9 @@ Welcome
 {% endblock %}
 {% block content%}
 <h1>Welcome to Koalby's UI!</h1>
-<p>Are you running Koalby in real life or in the simulation? Choose the corresponding button to initialize him and see what he can do.</p>
+<p>Press the Start button to initialize him and see what he can do.</p>
 <div>
-    <a href = "" class="init-button" id="initializeButton">Real Life</a>
-    <a href = "" class="init-button" id="simulationButton">Simulation</a>
+    <a href = "" class="init-button" id="initializeButton">Start</a>
     <p id = "failureSpot"></p>
     <div id="loader" style="display: none" class="loader"></div>
 <script>
@@ -40,24 +39,6 @@ Welcome
 
         };
         request.open("GET", "/init", true);
-        request.send(); });
-
-    var simulationButton = document.getElementById("simulationButton");
-    simulationButton.addEventListener("click", function (e) {
-        e.preventDefault();
-        document.getElementById("loader").style.display = "block"
-        const request = new XMLHttpRequest();
-        request.onload = function () {
-            console.log(request.response);
-            if (request.response === "0"){
-                document.getElementById("loader").style.display = "none"
-                document.getElementById("failureSpot").innerHTML = "Not connected to remote API server"
-            }
-            else{
-                window.location.replace("/home");
-            }
-        };
-        request.open("GET", "/init-simulation", true);
         request.send(); });
 
         </script>
