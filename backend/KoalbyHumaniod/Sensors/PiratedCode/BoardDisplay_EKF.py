@@ -1,14 +1,16 @@
+import time
+
 from backend.KoalbyHumaniod.Sensors.PiratedCode import Wireframe_EKF as wf
 import pygame
 from operator import itemgetter
 
-from backend.KoalbyHumaniod.Sensors.Sensors import do_work
+from backend.KoalbyHumaniod.Sensors.PID import do_work
 from operator import itemgetter
 
 import pygame
 
 from backend.KoalbyHumaniod.Sensors.PiratedCode import Wireframe_EKF as wf
-from backend.KoalbyHumaniod.Sensors.Sensors import do_work
+from backend.KoalbyHumaniod.Sensors.PID import do_work
 
 
 # client_id = vrep.simxStart('127.0.0.1', 19999, True, True, 5000, 5)
@@ -40,23 +42,27 @@ class ProjectionViewer:
                     running = False
             self.clock.tick(loopRate)
             data = robot.get_imu_data()
+            if data is None:
+                continue
             if len(data) == 0 | len(data) != 9:  # error handling
                 continue
             self.wireframe.quatRotate([data[0], data[1], data[2]],  # gyro
                                       [data[3], data[4], data[5]],  # accele
-                                      [data[6], data[7], data[8]],  # magnetometer
+                                      [data[6], data[7], data[8]],  # magnetometer - no magnetometer on MPU
                                       1 / loopRate)
             if display == 1:
                 self.display()
                 pygame.display.flip()
-            if loop_counter > 4:
-                loop_counter = 0
-            else:
+            # if loop_counter < 4:
+            #     loop_counter = loop_counter + 1
+            # else:
                 yaw, pitch, roll = self.wireframe.getAttitude()
-                do_work(yaw, pitch, roll, client_id)
-                loop_counter = loop_counter + 1
+                do_work(yaw, pitch, roll, robot)
+                # loop_counter = 0
 
             i = i + 1
+            # print(robot.get_imu_data())
+            time.sleep(.25)
         return self.wireframe.getAttitude()
 
     def display(self):
@@ -65,7 +71,7 @@ class ProjectionViewer:
 
         # Get the current attitude
         yaw, pitch, roll = self.wireframe.getAttitude()
-        # print(yaw, pitch, roll)
+        print(yaw, pitch, roll)
         # Sensors.do_work(yaw, pitch, roll)
         self.messageDisplay("Yaw: %.1f" % yaw,
                             self.screen.get_width() * 0.75,

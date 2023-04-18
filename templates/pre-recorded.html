@@ -3,15 +3,19 @@
     Pre Recorded Movements
 {% endblock %}
 {% block content %}
-    <h1>Pre Recorded Movements</h1>
+    <div class="header">
+        <h1>Pre Recorded Movements</h1>
+    </div>
+
     <div>
         <div class='child' style="display:inline-block">
+            <a href="/home" class="backButton">&laquo; Back</a>
             <p>Select a movement to add to the Queue</p>
-            <button id = "waveButton" class="command command">Wave</button>
-            <button id = "clapButton" class="command command">Clap</button>
-            <button id = "handLoopButton" class="command command">Hand Loop</button>
-            <button id = "" class="command command">Something Else</button>
-            <button id = "" class="command command">Something Else</button>
+            <button id="waveButton" class="command">Wave</button>
+            <button id="clapButton" class="command ">Clap</button>
+            <button id="handLoopButton" class="command">Hand Loop</button>
+            <button id="" class="command">Something Else</button>
+            <button id="" class="command">Something Else</button>
             {#            {% for label, command in commands.items() %}#}
             {#                <button class="command command-{{ command }}" value="{{ command }}">#}
             {#                    {{ label }}#}
@@ -21,16 +25,16 @@
         <div class='child' style="display:inline-block">
             <p>Queue Preview</p>
             <div>
-{#                <a href="queue" class="button">View Queue</a>#}
+                {#                <a href="queue" class="button">View Queue</a>#}
                 <p id="queue"></p>
                 <button id="runButton">RUN</button>
-    <p id="running"></p>
+                <p id="running"></p>
             </div>
         </div>
     </div>
 
     <script>
-    var waveButton = document.getElementById("waveButton");
+        var waveButton = document.getElementById("waveButton");
         waveButton.addEventListener("click", function (e) {
             e.preventDefault();
             localStorage.setItem("queue", localStorage.getItem("queue") + ", wave");
@@ -48,8 +52,8 @@
             clapP.innerText = "Clap";
             document.getElementById("queue").append(clapP);
             const up = document.createElement("button");
-                up.innerText = "+";
-                document.getElementById("queue").append(up);
+            up.innerText = "+";
+            document.getElementById("queue").append(up);
             {#document.getElementById("queue").innerText += "clap";#}
         });
         var handLoopButton = document.getElementById("handLoopButton");
@@ -72,8 +76,9 @@
             };
             request.open("POST", "/run", true);
             request.setRequestHeader("Content-Type", "application/json");
-            console.log(JSON.stringify(localStorage.getItem("queue")))
-            request.send(JSON.stringify((localStorage.getItem("queue"))));
+            console.log(JSON.stringify(localStorage.getItem("queue")));
+            request.send(JSON.stringify((localStorage.getItem("queue"))))
+        });
     </script>
 
 
@@ -82,14 +87,14 @@
 
 
 
-{#            const request = new XMLHttpRequest();#}
-{#            request.onload = function () {#}
-{#                document.getElementById('walkMessage').innerHTML = request.response;#}
-{#            };#}
-{#            request.open("GET", "/walk-start", true);#}
-{#            request.send();#}
-{#        });#}
-{#    </script>#}
+    {#            const request = new XMLHttpRequest();#}
+    {#            request.onload = function () {#}
+    {#                document.getElementById('walkMessage').innerHTML = request.response;#}
+    {#            };#}
+    {#            request.open("GET", "/walk-start", true);#}
+    {#            request.send();#}
+    {#        });#}
+    {#    </script>#}
 
 
 {% endblock %}
