@@ -1,3 +1,5 @@
+import time
+
 from backend.KoalbyHumaniod.Robot import RealRobot
 
 robot = RealRobot()

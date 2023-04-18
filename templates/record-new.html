@@ -3,25 +3,23 @@
     Record New Movement
 {% endblock %}
 {% block content %}
-    <div class="header">
-        <h1>Record New Movements</h1>
-    </div>
+    <h1>Record New Movements</h1>
     <div>
         <div class='child' style="display:inline-block">
-            <a href=tutorial class="tutorial-button">Help</a>
+            <a href=tutorial class="tutorial-button">?</a>
             <p>How many positions would you like to record?</p>
             <form>
                 <div class="posesInputGroup">
                     <label for="poses">Enter amount of positions to record:</label>
                     <input type="number" id="poseNum">
-                    {#                    <span class="validity"></span>#}
+{#                    <span class="validity"></span>#}
                 </div>
                 <div class="posesInputGroup">
                     <label for="file">Enter the new filename you would like to use:</label>
                     <input type="text" id="fileName">
                 </div>
                 <div>
-                    <button id="submit-button" type="button">Submit</button>
+                    <button type="button" onclick="myFunction()">Submit</button>
                 </div>
                 <div id="additionDiv">
                     <p id="numPoses"></p>
@@ -36,13 +34,7 @@
         let x = 0;
         let firstNum = 0;
         let enteredName = "";
-
-        var recordButton = document.getElementById("record-button");
-
-        var submitButton = document.getElementById("submit-button");
-        submitButton.addEventListener("click", function (e) {
-            e.preventDefault();
-            console.log("Submit pressed")
+        function myFunction() {
             x = document.getElementById("poseNum").value;
             const div = document.getElementById("numPoses");
             enteredName = document.getElementById("fileName").value;
@@ -56,11 +48,13 @@
             ticker.appendChild(text);
             div.appendChild(ticker);
             document.getElementById("record-button").style.display = "block";
-        });
+        }
 
+        var recordButton = document.getElementById("record-button");
         recordButton.addEventListener("click", function (e) {
+
             x -= 1;
-            if (x === 0) {
+            if(x === 0){
                 recordButton.disabled = "true"
             }
             document.getElementById('recordingSpot').innerHTML = "recording";
@@ -76,8 +70,8 @@
             } else {
                 isFirst = false;
             }
-            request.send(JSON.stringify({"fileName": enteredName, "firstTime": isFirst}));
-            console.log(JSON.stringify({"fileName": enteredName, "firstTime": isFirst}));
+            request.send(JSON.stringify({"fileName" : enteredName, "firstTime" : isFirst}));
+            console.log(JSON.stringify({"fileName" : enteredName, "firstTime" : isFirst}));
             e.preventDefault();
             document.getElementById("ticker").innerText = ("You have " + x + " more poses to record");
         });

@@ -2,6 +2,8 @@
 arduino which directly controls the motors"""
 from abc import ABC, abstractmethod
 
+from backend.Simulation import sim as vrep
+
 
 class Motor(ABC):
     def __int__(self, motor_id):
@@ -14,6 +16,23 @@ class Motor(ABC):
     @abstractmethod
     def set_position(self, position, client_id):
         pass
+
+
+class SimMotor(Motor):
+    def __init__(self, motor_id, handle):
+        self.handle = handle
+        # super().__init__(self, motor_id) # idk why this doesn't work/how to make it work
+        self.motor_id = motor_id
+
+    def get_position(self, client_id):
+        """reads the motor's current position from the Simulation and returns the value in degrees"""
+        return vrep.simxGetJointPosition(client_id, self.handle, vrep.simx_opmode_streaming)
+
+    def set_position(self, position, client_id):
+        """sends a desired motor position to the Simulation"""
+        # idk why you have to divide the motor position by a constant but it freaks out if not
+        vrep.simxSetJointTargetPosition(client_id, self.handle, position / 40, vrep.simx_opmode_streaming)
+        # pose_time not used -- could do something with velocity but unsure if its necessary to go through
 
 
 class RealMotor(Motor):

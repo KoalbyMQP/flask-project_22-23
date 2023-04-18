@@ -3,94 +3,89 @@
     Home
 {% endblock %}
 {% block content %}
-    <div class="header">
-        <h1>Home</h1>
+    <h1>Control Pane</h1>
+    <p>The robot has been initialized</p>
+    <div>
+        <a href=pre-recorded class="button">Pre Recorded Movements</a>
+        <a href=record-new class="button">Record New Movement</a>
+        <a href=tutorial class="tutorial-button">?</a>
     </div>
-
-
-    <div class="home_container">
-
-        <p id=descriptor>Koalby has been initialized! Select one of the following to see what he can do.</p>
-        <button id="tutorial" class="tutorial-button">Help</button>
-
-
-        <button id="walk" class="walk_button">Begin Walking</button>
-        <a href=/pre-recorded class="button">Execute Movements</a>
-        <a id="record-new" href=/record-new class="button">Record New Movement</a>
-
-        {#        <button id="left-hand" class = "hand-button">Move Left Hand</button>#}
-        {#        <button id="right-hand" class = "hand-button">Move Right Hand</button>#}
-
-        <button id="closeHand" class="move_button">Close</button>
-        <button id="openHand" class="move_button">Open</button>
+    <div>
+        <button id="startWalk" class="move_button">Press to Begin Walking</button>
+        <button id="stopWalk" class="move_button">Press to Stop Walking</button>
+        <p id="walkMessage"></p>
+    </div>
+    <div>
+        <button id="closeHand" class="move_button">Press to Close Left Hand</button>
+        <button id="openHand" class="move_button">Press to Open Left Hand</button>
+        <button id="stopHand" class="move_button">Press to Stop Left Hand</button>
+    <p id="handMessage"></p>
     </div>
     <script>
 
-        function clearQueue() {
-            localStorage.removeItem("queue");
-            document.getElementById("closeHand").style.display = 'none'
-            document.getElementById("openHand").style.display = 'none'
-            const request = new XMLHttpRequest();
-            request.onload = function () {
-                console.log(request.response)
-                if (!(request.response.isReal)) {
-                    document.getElementById("record-new").style.display = "none";
-                }
-            };
-            request.open("GET", "/is-real", true);
-            request.send();
-        }
+    function clearQueue() {
+        localStorage.removeItem("queue");
+    }
+    window.onload = clearQueue
 
-        window.onload = clearQueue
-        var isWalking = true
-
-        var button = document.getElementById("walk");
+    var button = document.getElementById("startWalk");
         button.addEventListener("click", function (e) {
-            console.log("Walk clicked");
-            if (isWalking) {
-                document.getElementById("walk").innerText = "Stop Walking";
-                isWalking = false
-            } else {
-                document.getElementById("walk").innerText = "Begin Walking";
-                isWalking = true
-            }
+            console.log("Starting walk");
             e.preventDefault();
             const request = new XMLHttpRequest();
             request.onload = function () {
-                document.getElementById('descriptor').innerHTML = request.response;
-
+                document.getElementById('walkMessage').innerHTML = request.response;
             };
-            request.open("GET", "/walk-toggle", true);
+            request.open("GET", "/walk-start", true);
             request.send();
         });
 
-        {#var openHandButton = document.getElementById("openHand");#}
-        {#openHandButton.addEventListener("click", function (e) {#}
-        {#    console.log("Opening Hand");#}
-        {#    e.preventDefault();#}
-        {#    const request = new XMLHttpRequest();#}
-        {#    request.onload = function () {#}
-        {#        document.getElementById('handMessage').innerHTML = request.response;#}
-        {#    };#}
-        {#    request.open("GET", "/open-hand/", true);#}
-        {#    request.send(); }#}
-        {#);#}
-        {##}
-        {#var closeHandButton = document.getElementById("closeHand");#}
-        {#closeHandButton.addEventListener("click", function (e) {#}
-        {#    console.log("Closing Hand");#}
-        {#    e.preventDefault();#}
-        {#    const request = new XMLHttpRequest();#}
-        {#    request.onload = function () {#}
-        {#        document.getElementById('handMessage').innerHTML = request.response;#}
-        {#    };#}
-        {#    request.open("GET", "/close-hand/", true);#}
-        {#    request.send();});#}
-
-        var tutorialButton = document.getElementById("tutorial");
-        tutorialButton.addEventListener("click", function (e) {
-
+        var stopWalkButton = document.getElementById("stopWalk");
+        stopWalkButton.addEventListener("click", function (e) {
+            console.log("Finishing walk");
+            e.preventDefault();
+            const request = new XMLHttpRequest();
+            request.onload = function () {
+                document.getElementById('walkMessage').innerHTML = request.response;
+            };
+            request.open("GET", "/walk-stop", true);
+            request.send();
         });
 
+        var openHandButton = document.getElementById("openHand");
+        openHandButton.addEventListener("click", function (e) {
+            console.log("Opening Hand");
+            e.preventDefault();
+            const request = new XMLHttpRequest();
+            request.onload = function () {
+                document.getElementById('handMessage').innerHTML = request.response;
+            };
+            request.open("GET", "/open-hand/", true);
+            request.send();
+        });
+
+        var closeHandButton = document.getElementById("closeHand");
+        closeHandButton.addEventListener("click", function (e) {
+            console.log("Closing Hand");
+            e.preventDefault();
+            const request = new XMLHttpRequest();
+            request.onload = function () {
+                document.getElementById('handMessage').innerHTML = request.response;
+            };
+            request.open("GET", "/close-hand/", true);
+            request.send();
+        });
+
+        var stopHandButton = document.getElementById("stopHand");
+        stopHandButton.addEventListener("click", function (e) {
+            console.log("Stopping Hand");
+            e.preventDefault();
+            const request = new XMLHttpRequest();
+            request.onload = function () {
+                document.getElementById('handMessage').innerHTML = request.response;
+            };
+            request.open("GET", "/stop-hand/", true);
+            request.send();
+        });
     </script>
 {% endblock %}
