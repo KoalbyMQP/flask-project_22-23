@@ -3,10 +3,11 @@
 Welcome
 {% endblock %}
 {% block content%}
-<h1>Welcome to Koalby's UI!</h1>
-<p>Press the Start button to initialize him and see what he can do.</p>
+<h1>Welcome to Koalby's UI.</h1>
+<p>Press Initialize to Initialize the robot and get started</p>
 <div>
-    <a href = "" class="init-button" id="initializeButton">Start</a>
+    <a href = "" class="init-button" id="initializeButton">Initialize</a>
+    <a href = "" class="init-button" id="simulationButton">Simulation</a>
     <p id = "failureSpot"></p>
     <div id="loader" style="display: none" class="loader"></div>
 <script>
@@ -15,15 +16,14 @@ Welcome
     }
     function hideButtons(){
         document.getElementById("sensorDataButton").style.display = "none";
-        document.getElementById("shutdownButton").style.display = "none";
-        document.getElementById("navbar").style.display = 'none';
+        document.getElementById("hideSensorDataButton").style.display = "none";
     }
     window.onload = clearStorage
     window.onload = hideButtons
 
 
-    var realRobotButton = document.getElementById("initializeButton");
-    realRobotButton.addEventListener("click", function (e) {
+    var button = document.getElementById("initializeButton");
+    button.addEventListener("click", function (e) {
         e.preventDefault();
         document.getElementById("loader").style.display = "block"
         const request = new XMLHttpRequest();
@@ -34,11 +34,30 @@ Welcome
                 document.getElementById("failureSpot").innerHTML = "Not connected to robot"
             }
             else{
-                window.location.replace("/home");
+                window.location.replace("http://127.0.0.1:5000/home");
             }
 
         };
         request.open("GET", "/init", true);
+        request.send(); });
+
+    var button = document.getElementById("simulationButton");
+    button.addEventListener("click", function (e) {
+        e.preventDefault();
+        document.getElementById("loader").style.display = "block"
+        const request = new XMLHttpRequest();
+        request.onload = function () {
+            console.log(request.response);
+            if (request.response === "0"){
+                document.getElementById("loader").style.display = "none"
+                document.getElementById("failureSpot").innerHTML = "Not connected to remote API server"
+            }
+            else{
+                window.location.replace("http://127.0.0.1:5000/home");
+            }
+
+        };
+        request.open("GET", "/init-simulation", true);
         request.send(); });
 
         </script>
