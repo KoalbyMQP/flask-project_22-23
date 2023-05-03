@@ -1,9 +1,10 @@
+import math
 import sys
-from time import sleep
+import time
 
-from backend.KoalbyHumaniod.Sensors.PiratedCode.BoardDisplay_EKF import initializeCube, ProjectionViewer
+from backend.KoalbyHumanoid.Sensors.PiratedCode.BoardDisplay_EKF import initializeCube, ProjectionViewer
 from backend.Simulation import sim as vrep
-from backend.KoalbyHumaniod.Robot import SimRobot
+from backend.KoalbyHumanoid.Robot import SimRobot
 
 
 def run_sim_sensors():
@@ -22,9 +23,24 @@ def run_sim_sensors():
     vrep.simxSetObjectFloatParameter(client_id, handle, vrep.sim_shapefloatparam_mass, 5, vrep.simx_opmode_blocking)  # gives sim cart a mass of 5
     # vrep.simxSetObjectParent('Right_Forearm', handle, False)
     # vrep.simxSetObjectParent('Left_Forearm', handle, False)
+
+    # filtered
     block = initializeCube()  # UNSURE WHAT THIS DOES SOMEONE COMMENT THIS
     pv = ProjectionViewer(640, 480, block)
     print("This will go on forever. Simulation and code needs to be manually stopped")
     pv.run(robot, client_id, 1)
+
+    # not filtered
+    # while True:
+    #     data = robot.get_imu_data()
+    #     # pitch_rad = math.asin(data[3]/(math.sqrt((data[3]*data[3]) + (data[4] * data[4]) + (data[5] * data[5]))))
+    #     pitch_rad = math.asin(data[3] / 9.81)
+    #     pitch = math.degrees(pitch_rad)
+    #     roll_rad = math.atan(data[4]/data[5])
+    #     roll = math.degrees(roll_rad)
+    #     print(str(pitch) + "," + str(roll))
+    #     time.sleep(.5)
+
+
 
 run_sim_sensors()

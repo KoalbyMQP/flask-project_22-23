@@ -5,7 +5,7 @@ import logging
 
 
 from backend.Simulation import sim as vrep
-from backend.KoalbyHumaniod.Robot import SimRobot
+from backend.KoalbyHumanoid.Robot import SimRobot
 
 vrep.simxFinish(-1)  # just in case, close all opened connections
 client_id = vrep.simxStart('127.0.0.1', 19999, True, True, 5000, 5)  # inits simulation

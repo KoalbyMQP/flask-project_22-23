@@ -1,9 +1,9 @@
 from threading import Thread
 import sys
 
-from backend.KoalbyHumaniod.Robot import RealRobot
+from backend.KoalbyHumanoid.Robot import RealRobot
 # from backend.simulation import sim as vrep
-# from backend.KoalbyHumaniod.Robot import SimRobot
+# from backend.KoalbyHumanoid.Robot import SimRobot
 
 robot = RealRobot()  # inits real-world robot
 
