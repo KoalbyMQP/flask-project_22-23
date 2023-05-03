@@ -1,4 +1,4 @@
-from backend.KoalbyHumaniod.Robot import RealRobot
+from backend.KoalbyHumanoid.Robot import RealRobot
 
 robot = RealRobot()
 

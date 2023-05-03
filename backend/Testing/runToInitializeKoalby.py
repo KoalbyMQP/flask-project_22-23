@@ -1,4 +1,4 @@
-from backend.KoalbyHumaniod.Robot import RealRobot
+from backend.KoalbyHumanoid.Robot import RealRobot
 import serial.tools.list_ports as ports
 
 # com_ports = list(ports.comports())  # create a list of com ['COM1','COM2']

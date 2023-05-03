@@ -1,8 +1,8 @@
 import csv
 import sys
 
-from backend.KoalbyHumaniod.Kinematics.TrajectoryPlanning import TrajPlanner
-from backend.KoalbyHumaniod.Robot import SimRobot, RealRobot
+from backend.KoalbyHumanoid.Kinematics.TrajectoryPlanning import TrajPlanner
+from backend.KoalbyHumanoid.Robot import SimRobot, RealRobot
 from backend.Primitives.MovementManager import play_motion_kinematics
 from backend.Simulation import sim as vrep
 
@@ -36,7 +36,7 @@ class Walker:
         self.right_leg_positions = []
         self.left_leg_positions = []
         with open(
-                "./backend/Primitives/poses/leftWalk") as f:
+                "/Users/caseysnow/Desktop/MQP/flask-project/backend/Primitives/poses/rightWalk") as f:
             # with open(poses/replay_filename) as f:
             csv_recorded_poses = [{k: int(v) for k, v in row.items()}
                                   for row in

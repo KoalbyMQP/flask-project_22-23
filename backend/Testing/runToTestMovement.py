@@ -1,10 +1,10 @@
 import sys
 import time
 
-from backend.KoalbyHumaniod.Robot import RealRobot
+from backend.KoalbyHumanoid.Robot import RealRobot
 from backend.Primitives.MovementManager import play_motion
 from backend.Simulation import sim as vrep
-from backend.KoalbyHumaniod.Robot import SimRobot
+from backend.KoalbyHumanoid.Robot import SimRobot
 
 
 def setup():

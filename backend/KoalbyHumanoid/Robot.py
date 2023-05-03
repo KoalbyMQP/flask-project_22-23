@@ -1,11 +1,11 @@
 import time
 from abc import ABC, abstractmethod
 
-import backend.KoalbyHumaniod.Config as Config
+import backend.KoalbyHumanoid.Config as Config
 from backend.ArduinoSerial import ArduinoSerial
-from backend.KoalbyHumaniod.Motor import RealMotor, SimMotor
+from backend.KoalbyHumanoid.Motor import RealMotor, SimMotor
 from backend.Simulation import sim as vrep
-from backend.KoalbyHumaniod.Sensors.PiratedCode import Kalman_EKF as KM
+from backend.KoalbyHumanoid.Sensors.PiratedCode import Kalman_EKF as KM
 
 
 class Robot(ABC):
@@ -49,6 +49,7 @@ class Robot(ABC):
         pass
 
     def get_filtered_data(self, data):
+        # print("here")
         w = [data[0], data[1], data[2]]  # gyro
         dt = 1 / 50
         a = [data[3], data[4], data[5]]  # accele
@@ -150,7 +151,6 @@ class RealRobot(Robot):
     def __init__(self):
         self.arduino_serial = ArduinoSerial()
         self.motors = self.motors_init()
-
         print("here")
         self.primitives = []
         self.is_real = True
@@ -171,7 +171,7 @@ class RealRobot(Robot):
 
         motors = list()
         for motorConfig in Config.motors:
-            #               motorID        angleLimit         name              serial
+            #                    motorID        angleLimit         name              serial
             motor = RealMotor(motorConfig[0], motorConfig[1], motorConfig[3], self.arduino_serial)
             setattr(RealRobot, motorConfig[3], motor)
             motors.append(motor)
@@ -208,6 +208,9 @@ class RealRobot(Robot):
                 data.append(num_piece)
             else:
                 data.append(.000001)
+        # self.arduino_serial.send_command('42')  # reads Euler angles
+        # euler_angles = self.arduino_serial.read_command()
+        # print("Raw Euler angles are " + str(euler_angles))
         return data
 
     def read_battery_level(self):

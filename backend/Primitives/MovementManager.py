@@ -19,33 +19,47 @@ recorded_poses = []
 
 def play_motion(robot, file_name, pose_time, pose_delay):
     pose_time_millis = int((pose_time - 0.005) * 1000)
-    long_file_name = "./backend/Primitives/poses/" + file_name
+    long_file_name = "/Users/caseysnow/Desktop/MQP/flask-project/backend/Primitives/poses/" + file_name
     # long_file_name = "./flaskProject/backend/Primitives/poses/" + file_name
     with open(long_file_name) as f:
         csv_recorded_poses = [{k: int(v) for k, v in row.items()}
                               for row in
                               csv.DictReader(f, skipinitialspace=True)]
-    for poseMotorPositionsDict in csv_recorded_poses:
-        motor_positions_dict = poseMotorPositionsDict
-        robot.update_motors(pose_time_millis, motor_positions_dict)
+    for pose_motor_positions_dict in csv_recorded_poses:
+        motor_positions_dict = pose_motor_positions_dict
+        for key, value in motor_positions_dict.items():
+            for motor in robot.motors:
+                if str(motor.motor_id) == str(key):
+                    #                               position                  time
+                    motor.set_position_time(motor_positions_dict[key], pose_time_millis)
+        # robot.update_motors(pose_time_millis, motor_positions_dict)
         time.sleep(pose_time + pose_delay)
 
 
 def record_motion(robot, pose_num):
-    recorded_poses = []
+    poses_recorded = []
     """
             Records a series of manually positioned robot poses with a desired number of poses and saves them to a csv file
             """
     for m in robot.motors:
-        m.compliant_toggle(1)  # sets all motors in the robot to be compliant for moving to poses
-        time.sleep(0.1)  # need delay for comm time
+        # m.compliant_toggle(1)  # sets all motors in the robot to be compliant for moving to poses
+        time.sleep(.5)  # need delay for comm time
+        # print(m.motor_id)
+        # m.compliant_toggle(0)
+
+        if m.motor_id == 1:
+            m.compliant_toggle(1)
+            print("got 1")
         if m.motor_id == 2:
-            m.compliant_toggle(0)
+            m.compliant_toggle(1)
             print("got 2")
-        if m.motor_id == 13:
-            print("got 13")
-        if m.motor_id == 18:
-            print("got 18")
+        if m.motor_id == 3:
+            m.compliant_toggle(1)
+            print("got 3")
+        if m.motor_id == 15:
+            m.compliant_toggle(1)
+            print("got 15")
+
     for poseIndex in range(pose_num):  # for each pose from 0 to desired number of poses
         pose_motor_positions_dict = {}
         continue_select = int(input("Type 2 to record to next pose:"))  # wait for user to input "1" in console
@@ -54,17 +68,17 @@ def record_motion(robot, pose_num):
             for m in robot.motors:  # for each motor in Motors list
                 pose_motor_positions_dict[
                     m.motor_id] = m.get_position("")  # add the motor ID as key and motor position as value
-            recorded_poses.append(pose_motor_positions_dict)  # add dictionary of current robot pose to list of
+            poses_recorded.append(pose_motor_positions_dict)  # add dictionary of current robot pose to list of
             # recorded poses
         continue_select = 0
         time.sleep(0.01)  # comms buffer delay
     # write dictionary of recorded poses to csv file
-    motor_id_headers = recorded_poses[0].keys()
+    motor_id_headers = poses_recorded[0].keys()
     motion_file_name = str(input("Input saved file name:"))  # request a filename
-    motion_file = open("./backend/Primitives/poses/" + str(motion_file_name), "w")
+    motion_file = open("/Users/caseysnow/Desktop/MQP/flask-project/backend/Primitives/poses" + str(motion_file_name), "w")
     dict_writer = csv.DictWriter(motion_file, motor_id_headers)
     dict_writer.writeheader()
-    dict_writer.writerows(recorded_poses)
+    dict_writer.writerows(poses_recorded)
     motion_file.close()
     for m in robot.motors:
         m.compliant_toggle(0)  # set motors back to non-compliant for use elsewhere

@@ -1,8 +1,8 @@
 import csv
 import sys
 
-from backend.KoalbyHumaniod.Kinematics.TrajectoryPlanning import TrajPlanner
-from backend.KoalbyHumaniod.Robot import SimRobot
+from backend.KoalbyHumanoid.Kinematics.TrajectoryPlanning import TrajPlanner
+from backend.KoalbyHumanoid.Robot import SimRobot
 from backend.Primitives.MovementManager import play_motion_kinematics
 from backend.Simulation import sim as vrep
 

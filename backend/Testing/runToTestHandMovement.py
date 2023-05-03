@@ -1,6 +1,6 @@
 import time
 
-from backend.KoalbyHumaniod.Robot import RealRobot
+from backend.KoalbyHumanoid.Robot import RealRobot
 
 robot = RealRobot()  # init real-world robot
 robot.close_hand()  # closes gripper

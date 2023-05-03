@@ -6,8 +6,8 @@ from flask import Flask, Response, request
 from flask import render_template
 from serial import SerialException
 
-from backend.KoalbyHumaniod.Robot import RealRobot, SimRobot
-from backend.KoalbyHumaniod.Sensors.sensorData import SensorData
+from backend.KoalbyHumanoid.Robot import RealRobot, SimRobot
+from backend.KoalbyHumanoid.Sensors.sensorData import SensorData
 from backend.Primitives import MovementManager
 from backend.Simulation import sim as vrep
 from backend.Testing.runToTestWalk import Walker

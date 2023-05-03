@@ -1,7 +1,7 @@
 import time
 
-from backend.KoalbyHumaniod.Sensors.PiratedCode.BoardDisplay_EKF import initializeCube, ProjectionViewer
-from backend.KoalbyHumaniod.Robot import RealRobot
+from backend.KoalbyHumanoid.Sensors.PiratedCode.BoardDisplay_EKF import initializeCube, ProjectionViewer
+from backend.KoalbyHumanoid.Robot import RealRobot
 
 # Port Finder
 # import serial.tools.list_ports as ports
@@ -12,7 +12,18 @@ from backend.KoalbyHumaniod.Robot import RealRobot
 
 robot = RealRobot()  # inits real-world robot
 while True:
-    print(robot.arduino_serial.send_command('41'))  # reads IMU data
+    robot.arduino_serial.send_command('42')
+    print(robot.arduino_serial.read_command())  # reads IMU data
+    time.sleep(.5)
+
+    # robot.arduino_serial.send_command('41')
+    # data = robot.get_imu_data()
+    # # print(data)
+    # if data is not None:
+    #     if len(data) != 9:
+    #         continue
+    #     print(robot.get_filtered_data(data))
+    # time.sleep(.25)
 
 # print(robot.get_imu_data())
 # while True:

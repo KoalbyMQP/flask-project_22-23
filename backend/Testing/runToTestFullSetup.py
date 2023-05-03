@@ -1,13 +1,13 @@
 from threading import Thread
 import sys
 
-from backend.KoalbyHumaniod.Robot import RealRobot
+from backend.KoalbyHumanoid.Robot import RealRobot
 from backend.simulation import sim as vrep
-from backend.KoalbyHumaniod.Robot import SimRobot
+from backend.KoalbyHumanoid.Robot import SimRobot
 from backend.Primitives.MovementManager import play_motion
 from backend.testing.runToTestKinematics import Walker
 from backend.testing.runToTestSensors import pv
-from backend.KoalbyHumaniod.Kinematics.TrajectoryPlanning import TrajPlanner
+from backend.KoalbyHumanoid.Kinematics.TrajectoryPlanning import TrajPlanner
 from backend.Primitives.MovementManager import play_motion_kinematics
 
 # initialize Walker
