@@ -81,21 +81,30 @@ class SimRobot(Robot):
         super().__init__(False, self.motors)
         self.primitives = []
         self.is_real = False
-
+    
         # print(client_id)
 
     def motors_init(self):
         motors = list()
         for motorConfig in Config.motors:
+            if motorConfig[0] == 19: ## Motor does not exist in CoppeliaSim but does exist in Config.py. I am hesitant to delete it, so this is a bandaid fix. -Scott
+                continue
             # handle = vrep.simxGetObjectHandle(self.client_id, motorConfig[3], vrep.simx_opmode_blocking)[1]
             # print(self.client_id)
             vrep.simxSetObjectFloatParameter(self.client_id, vrep.simxGetObjectHandle(self.client_id, motorConfig[3],
                                                                                       vrep.simx_opmode_blocking)[1],
                                              vrep.sim_shapefloatparam_mass, 1,
                                              vrep.simx_opmode_blocking)
-            motor = SimMotor(motorConfig[0],
-                             vrep.simxGetObjectHandle(self.client_id, motorConfig[3], vrep.simx_opmode_blocking)[1])
+            motor = SimMotor(motorConfig[0], self.client_id, vrep.simxGetObjectHandle(self.client_id, motorConfig[3], vrep.simx_opmode_blocking)[1], motorConfig[5])
             setattr(SimRobot, motorConfig[3], motor)
+
+            #Sets each motor to streaming opmode
+            print("Beginning to stream ", motor.motor_id)
+
+            res = vrep.simx_return_novalue_flag
+            while res != vrep.simx_return_ok:
+                res = vrep.simxGetJointPosition(self.client_id, motor.handle, vrep.simx_opmode_streaming)[0]
+           
             motors.append(motor)
         return motors
 
@@ -168,7 +177,6 @@ class RealRobot(Robot):
         super().__init__(True, self.motors)
 
     def motors_init(self):
-
         motors = list()
         for motorConfig in Config.motors:
             #                    motorID        angleLimit         name              serial

@@ -29,7 +29,7 @@ class Joint:
             while res != vrep.simx_return_ok:
                 res, data = vrep.simxGetJointPosition(client_id, motor.handle, vrep.simx_opmode_streaming)
 
-    def move(self, target):
+    def move(self,):
         self.target = math.radians(target)
         actual = vrep.simxGetJointPosition(self.client_id, self.motor.handle, vrep.simx_opmode_buffer)[1]
         error = self.target - actual

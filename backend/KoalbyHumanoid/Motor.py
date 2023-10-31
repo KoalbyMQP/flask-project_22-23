@@ -1,7 +1,8 @@
 """The Motor class hold all information for an abstract motor on the physical robot. It is used to interface with the
 arduino which directly controls the motors"""
 from abc import ABC, abstractmethod
-
+import math
+import time
 from backend.Simulation import sim as vrep
 
 
@@ -19,20 +20,46 @@ class Motor(ABC):
 
 
 class SimMotor(Motor):
-    def __init__(self, motor_id, handle):
+    def __init__(self, motor_id, client_id, handle, pidGains):
         self.handle = handle
         # super().__init__(self, motor_id) # idk why this doesn't work/how to make it work
         self.motor_id = motor_id
+        self.pidGains = pidGains
+        self.client_id = client_id
+        self.target = 0
+        self.prevTime = 0
+        self.prevError = 0
+        self.effort = 0
 
-    def get_position(self, client_id):
+    def get_position(self):
         """reads the motor's current position from the Simulation and returns the value in degrees"""
-        return vrep.simxGetJointPosition(client_id, self.handle, vrep.simx_opmode_streaming)
+        return vrep.simxGetJointPosition(self.client_id, self.handle, vrep.simx_opmode_streaming)
 
-    def set_position(self, position, client_id):
+    def set_position(self, position, ):
         """sends a desired motor position to the Simulation"""
         # idk why you have to divide the motor position by a constant but it freaks out if not
-        vrep.simxSetJointTargetPosition(client_id, self.handle, position / 40, vrep.simx_opmode_streaming)
+        vrep.simxSetJointTargetPosition(self.client_id, self.handle, position / 40, vrep.simx_opmode_streaming)
         # pose_time not used -- could do something with velocity but unsure if its necessary to go through
+
+    def move(self):
+        kP, kI, kD = self.pidGains
+        actual = vrep.simxGetJointPosition(self.client_id, self.handle, vrep.simx_opmode_buffer)[1]
+        error = math.radians(self.target) - actual
+        p = error * kP
+        
+        elapsedTime = time.perf_counter() - self.prevTime
+        dedt = (self.prevError - error) / (self.prevTime - elapsedTime)
+        #d = kD * dedt
+        d = 0
+
+        self.effort = p + d
+        if(self.effort > 4):
+            self.effort = 4
+        elif(self.effort < -4):
+            self.effort = -4
+        vrep.simxSetJointTargetVelocity(self.client_id, self.handle, self.effort, vrep.simx_opmode_streaming)
+        self.prevError = error
+        self.prevTime = time.perf_counter()
 
 
 class RealMotor(Motor):
