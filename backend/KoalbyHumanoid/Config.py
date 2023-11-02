@@ -23,12 +23,14 @@ motors = [
     [2, [0, 0], 'Herk', 'Right_Shoulder_Abductor_Joint', [1,1,1], [1, 0, 10]],
     [3, [0, 0], 'Herk', 'Right_Upper_Arm_Rotator_Joint', [1,1,1], [1, 0, 10]],
     [15, [0, 0], 'Herk', 'Right_Elbow_Joint', [1,1,1], [1, 0, 10]],
+    [25, [0,0], 'Herk', 'Right_Wrist_Joint', [1,1,1], [1, 0, 10]],
 
     # Left Arm
     [11, [0, 0], 'Herk', 'Left_Shoulder_Rotator_Joint', [1,1,1], [1, 0, 10]],
     [10, [0, 0], 'Herk', 'Left_Shoulder_Abductor_Joint', [1,1,1], [1, 0, 10]],
     [6, [0, 0], 'Herk', 'Left_Upper_Arm_Rotator_Joint', [1,1,1], [1, 0, 10]],
     [7, [0, 0], 'Herk', 'Left_Elbow_Joint', [1,1,1], [1, 0, 10]],
+    [26, [0,0], 'Herk', 'Left_Wrist_Joint', [1,1,1], [1, 0, 10]],
 
     # Torso
     [17, [0, 0], 'Herk', 'Lower_Torso_Front2Back_Joint', [1,1,1], [1, 0, 10]],
@@ -40,9 +42,9 @@ motors = [
     # Right Leg
     [9, [0, 0], 'Herk', 'Right_Thigh_Abductor_Joint', [1,1,1], [1, 0, 10]],
     [14, [0, 0], 'Herk', 'Right_Thigh_Rotator_Joint', [1,1,1], [1, 0, 10]],
-    [31, [0, 0], 'Herk', 'Right_Thigh_Kick_Joint', [1,1,1], [1, 0, 10]],
-    [12, [0, 0], 'Herk', 'Right_Knee_Joint', [1,1,1], [1, 0, 10]],
-    [5, [0, 0], 'Herk', 'Right_Ankle_Joint', [1,1,1], [1, 0, 10]],
+    [31, [0, 0], 'Herk', 'Right_Thigh_Kick_Joint', [1,1,1], [5, 0, 5]], #17
+    [12, [0, 0], 'Herk', 'Right_Knee_Joint', [1,1,1], [20, 0, 0]], #18
+    [5, [0, 0], 'Herk', 'Right_Ankle_Joint', [1,1,1], [1, 0, 10]], #19
 
     # Left Leg
     [8, [0, 0], 'Herk', 'Left_Thigh_Abductor_Joint', [1,1,1], [1, 0, 10]],

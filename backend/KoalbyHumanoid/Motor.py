@@ -30,28 +30,38 @@ class SimMotor(Motor):
         self.prevTime = 0
         self.prevError = 0
         self.effort = 0
+        self.errorMemorySize = 100
+        self.errorMemory = [0]*self.errorMemorySize
+        self.errorMemoryIndex = 0
 
     def get_position(self):
         """reads the motor's current position from the Simulation and returns the value in degrees"""
-        return vrep.simxGetJointPosition(self.client_id, self.handle, vrep.simx_opmode_streaming)
+        return vrep.simxGetJointPosition(self.client_id, self.handle, vrep.simx_opmode_buffer)[1]
 
-    def set_position(self, position, ):
+    def set_position(self, position):
         """sends a desired motor position to the Simulation"""
+        position = math.radians(position)
         # idk why you have to divide the motor position by a constant but it freaks out if not
-        vrep.simxSetJointTargetPosition(self.client_id, self.handle, position / 40, vrep.simx_opmode_streaming)
+        # ^^^ From 22-23 Team. Kept it as a mark of shame lol
+        vrep.simxSetJointTargetPosition(self.client_id, self.handle, position, vrep.simx_opmode_streaming)
         # pose_time not used -- could do something with velocity but unsure if its necessary to go through
 
-    def move(self):
+    def move(self, position="target"):
+        if position == "target":
+            position = self.target
         kP, kI, kD = self.pidGains
         actual = vrep.simxGetJointPosition(self.client_id, self.handle, vrep.simx_opmode_buffer)[1]
-        error = math.radians(self.target) - actual
+        error = math.radians(position) - actual
         p = error * kP
         
+        self.errorMemoryIndex %= self.errorMemorySize
+        self.errorMemory[self.errorMemoryIndex] = error
+        i = sum(self.errorMemory) * kI
+
         elapsedTime = time.perf_counter() - self.prevTime
         dedt = (self.prevError - error) / (self.prevTime - elapsedTime)
-        #d = kD * dedt
-        d = 0
-
+        d = kD * dedt
+        
         self.effort = p + d
         if(self.effort > 4):
             self.effort = 4
@@ -60,7 +70,7 @@ class SimMotor(Motor):
         vrep.simxSetJointTargetVelocity(self.client_id, self.handle, self.effort, vrep.simx_opmode_streaming)
         self.prevError = error
         self.prevTime = time.perf_counter()
-
+        self.errorMemoryIndex += 1
 
 class RealMotor(Motor):
     def __init__(self, motor_id, angle_limit, name, serial):

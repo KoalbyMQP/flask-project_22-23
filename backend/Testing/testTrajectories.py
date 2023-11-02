@@ -1,12 +1,14 @@
 import sys
 import time
 sys.path.append("./")
-from backend.KoalbyHumanoid.Robot import RealRobot, SimRobot
+from backend.KoalbyHumanoid.Robot import RealRobot, SimRobot, Joints
 from backend.Simulation import sim as vrep
 from backend.LimbTrajectories.rightLegTraj import *
-from backend.LimbTrajectories.jointVelocityControl import Joint
+import matplotlib.pyplot as plt
+#from backend.LimbTrajectories.jointVelocityControl import Joint
 
 def setup():
+    #x = vrep.simxStartSimulation(0, vrep.simx_opmode_oneshot)
     simulation_flag = int(input("Are you running the Simulation? Please enter 1 for yes and 0 for no: "))
     if simulation_flag == 1:
         vrep.simxFinish(-1)  # just in case, close all opened connections
@@ -21,20 +23,22 @@ def setup():
         client_id = -1
     return robot, client_id
 
-def moveMotors():
-    for motor in robot.motors:
-        motor.target = 45
-        motor.move()
-    pass
-
 robot, client_id = setup()
 
 print("Setup Complete")
+startTime = time.time()
+xData = list()
+yData = list()
+while time.time() - startTime < 5:
+    robot.motors[Joints.Right_Thigh_Kick_Joint.value].move(90)
+    robot.motors[Joints.Right_Knee_Joint.value].move(-90)
+    robot.motors[Joints.Right_Ankle_Joint.value].move(0)
+    xData.append(time.time() - startTime)
+    yData.append(-math.pi/2 - robot.motors[Joints.Right_Knee_Joint.value].get_position())
+    #print(robot.motors[Joints.Right_Knee_Joint.value].get_position())
 
-while True:
-    moveMotors()
-
-
+plt.scatter(xData, yData)
+plt.show()
 """
 Old Code, using for potential reference. Delete when robust traj planner is created
 

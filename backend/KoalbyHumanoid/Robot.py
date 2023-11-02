@@ -1,5 +1,6 @@
 import time
 from abc import ABC, abstractmethod
+from enum import Enum
 
 import backend.KoalbyHumanoid.Config as Config
 from backend.ArduinoSerial import ArduinoSerial
@@ -7,7 +8,43 @@ from backend.KoalbyHumanoid.Motor import RealMotor, SimMotor
 from backend.Simulation import sim as vrep
 from backend.KoalbyHumanoid.Sensors.PiratedCode import Kalman_EKF as KM
 
+class Joints(Enum):
+    Right_Shoulder_Rotator_Joint = 0
+    Right_Shoulder_Abductor_Joint = 1
+    Right_Upper_Arm_Rotator_Joint = 2
+    Right_Elbow_Joint = 3
+    Right_Wrist_Joint = 4
 
+    # Left Arm
+    Left_Shoulder_Rotator_Joint = 5
+    Left_Shoulder_Abductor_Joint = 6
+    Left_Upper_Arm_Rotator_Joint = 7
+    Left_Elbow_Joint = 8
+    Left_Wrist_Joint = 9
+
+    # Torso
+    Lower_Torso_Front2Back_Joint = 10
+    Chest_Side2Side_Joint = 11
+    Lower_Torso_Side2Side_Joint = 12
+    Upper_Torso_Rotator_Joint = 13
+
+    # Right Leg
+    Right_Thigh_Abductor_Joint = 14
+    Right_Thigh_Rotator_Joint = 15
+    Right_Thigh_Kick_Joint = 16
+    Right_Knee_Joint = 17
+    Right_Ankle_Joint = 18
+
+    # Left Leg
+    Left_Thigh_Abductor_Joint = 19
+    Left_Thigh_Rotator_Joint = 20
+    Left_Thigh_Kick_Joint = 21
+    Left_Knee_Joint = 22
+    Left_Ankle_Joint = 23
+
+    # Head
+    Neck_Forward2Back_Joint = 25
+    Neck_Rotator_Joint = 26 
 class Robot(ABC):
     def __init__(self, is_real, motors):
         self.motors = motors
