@@ -190,6 +190,14 @@ class SimRobot(Robot):
 
     def stop_hand(self):
         pass
+    
+    def moveAllTo(self, position):
+        for motor in self.motors:
+            motor.move(position)
+            
+    def moveAllToTarget(self):
+        for motor in self.motors:
+            motor.move(motor.target)
 
 
 class RealRobot(Robot):

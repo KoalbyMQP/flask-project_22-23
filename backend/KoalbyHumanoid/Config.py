@@ -36,7 +36,7 @@ motors = [
     [17, [0, 0], 'Herk', 'Lower_Torso_Front2Back_Joint', [1,1,1], [1, 0, 10]],
     [18, [0, 0], 'Herk', 'Chest_Side2Side_Joint', [1,1,1], [1, 0, 10]],
     [19, [0, 0], 'Herk', 'Upper_Torso_RotatorJoint'],
-    [21, [0, 0], 'Herk', 'Lower_Torso_Side2Side_Joint', [1,1,1], [8, 0, 10]],
+    [21, [0, 0], 'Herk', 'Lower_Torso_Side2Side_Joint', [1,1,1], [10.0, 0.0, 50.0]],
     [23, [0, 0], 'Herk', 'Upper_Torso_Rotator_Joint', [1,1,1], [1, 0, 10]],
 
     # Right Leg
@@ -56,7 +56,6 @@ motors = [
     # Head
     [23, [0, 0], 'Dyn', 'Neck_Forward2Back_Joint', [1,1,1], [1, 0, 10]],
     [24, [0, 0], 'Dyn', 'Neck_Rotator_Joint', [1,1,1], [1, 0, 10]]
-
 
     # # Right Arm
     # [3, [0, 0], 'Herk', 'Right_Shoulder_Rotator_Joint'],
@@ -119,3 +118,10 @@ motorGroups = [
     ['l_arm', motors[4:8]],
     ['torso', motors[8:13]],
     ['r_leg', motors[13:20]]]
+
+links = [
+    #linkName, controlledBy, COM_TFrame, mass
+    [],
+    [],
+    [],
+]

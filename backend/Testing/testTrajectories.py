@@ -1,44 +1,40 @@
-import sys
-import time
+import sys, time, math 
 sys.path.append("./")
-from backend.KoalbyHumanoid.Robot import RealRobot, SimRobot, Joints
-from backend.Simulation import sim as vrep
-from backend.LimbTrajectories.rightLegTraj import *
+from backend.Testing import initSim, initRobot
+from backend.KoalbyHumanoid.Robot import Joints
+from backend.LimbTrajectories.rightLegTraj import * # Old Traj Code, see bottom comment
 import matplotlib.pyplot as plt
-#from backend.LimbTrajectories.jointVelocityControl import Joint
 
-def setup():
-    #x = vrep.simxStartSimulation(0, vrep.simx_opmode_oneshot)
-    simulation_flag = int(input("Are you running the Simulation? Please enter 1 for yes and 0 for no: "))
-    if simulation_flag == 1:
-        vrep.simxFinish(-1)  # just in case, close all opened connections
-        client_id = vrep.simxStart('127.0.0.1', 19999, True, True, 5000, 5)
-        if client_id != -1:
-            print("Connected to remote API server")
-        else:
-            sys.exit("Not connected to remote API server")
-        robot = SimRobot(client_id)  # inits sim robot
-    else:  # inits real-world robot
-        robot = RealRobot()
-        client_id = -1
-    return robot, client_id
+# Edit to declare if you are testing the sim or the real robot
+isSim = True
 
-robot, client_id = setup()
+robot, client_id = initSim.setup() if isSim else initRobot.setup()
 
 print("Setup Complete")
 startTime = time.time()
 xData = list()
 yData = list()
 while time.time() - startTime < 5:
-    robot.motors[Joints.Right_Thigh_Kick_Joint.value].move(90)
-    robot.motors[Joints.Right_Knee_Joint.value].move(-90)
-    robot.motors[Joints.Right_Ankle_Joint.value].move(0)
+    # robot.motors[Joints.Right_Thigh_Kick_Joint.value].45move(90)
+    # robot.motors[Joints.Right_Knee_Joint.value].move(-90)
+    # robot.motors[Joints.Right_Ankle_Joint.value].move(0)
+    motorsTarget = 0
+    robot.moveAllTo(motorsTarget)
     xData.append(time.time() - startTime)
-    yData.append(-math.pi/2 - robot.motors[Joints.Right_Knee_Joint.value].get_position())
+    yData.append(motorsTarget - robot.motors[Joints.Lower_Torso_Side2Side_Joint.value].get_position())
     #print(robot.motors[Joints.Right_Knee_Joint.value].get_position())
 
-plt.scatter(xData, yData)
+plt.plot(xData, yData)
+#plt.plot(xData, yData*0)
+plt.title("Lower Torso - P: 10, I: 0, D: 50")
+plt.xlabel("Time (seconds)")
+plt.ylabel("Position Error (radians)")
+plt.grid()
 plt.show()
+
+
+
+
 """
 Old Code, using for potential reference. Delete when robust traj planner is created
 
