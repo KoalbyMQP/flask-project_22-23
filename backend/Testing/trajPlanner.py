@@ -116,7 +116,7 @@ class TrajPlannerNew():
         # Sets pf to proper position for mulitplication
         qs[int((degreeN+1)/2)] = pf
         # Gets coefficients by division of matricies
-        coeff = np.linalg.lstsq(coeffMatrix,qs)
+        coeff = np.linalg.lstsq(coeffMatrix,qs,rcond=None)
         return coeff[0]
 
     ## Quintic Trajectory Methods
@@ -195,7 +195,7 @@ class TrajPlannerNew():
         # Inputs to use for solving coefficients
         qs = np.vstack([p0, v0, a0, pf, vf, af])
         # Gets coefficients by division of matricies
-        coeff = np.linalg.lstsq(coeffMatrix,qs)
+        coeff = np.linalg.lstsq(coeffMatrix,qs,rcond=None)
         return coeff[0]
 
     ## Cubic Trajectory Methods
@@ -270,5 +270,5 @@ class TrajPlannerNew():
         # Inputs to use for solving coefficients
         qs = np.vstack([p0, v0, pf, vf])
         # Gets coefficients by division of matricies
-        coeff = np.linalg.lstsq(coeffMatrix,qs)
+        coeff = np.linalg.lstsq(coeffMatrix,qs,rcond=None)
         return coeff[0]

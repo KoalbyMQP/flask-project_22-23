@@ -27,7 +27,20 @@ def makeTMatrix(R, p):
 
 #Twists of Joints
 S1 = [1, 0, 0, 0, 67.02, -74.53]
+M1 = [
+    [1, 0, 0, -101.09],
+    [0, 1, 0, 74.53],
+    [0, 0, 1, 67.02],
+    [1, 0, 0, 1],
+]
+
 S2 = [0, 0, 1, 72.44, 127.29, 0]
+M2 = [
+    [1, 0, 0, -127.29],
+    [0, 1, 0, 72.44],
+    [0, 0, 1, 62.05],
+    [1, 0, 0, 1], 
+]
 S3 = [1, 0, 0, 0, 67.37, -71.22]
 S4 = [0, 1, 0, -54.34, 0, 330.19]
 S5 = [0, 1, 0, -54.34, 0, 330.19]
@@ -42,13 +55,25 @@ M = [
 ]
 
 R = rodriguez(S1, math.pi)
-p = ramirez(S1, 0)
+p = ramirez(S1, math.pi)
 
-T = makeTMatrix(R, p)
+theta1 = math.pi / 6
+t1 = mr.FKinSpace(M1, [S1, S1, S1, S1, S1, S1], [0, 0, 0, 0, 0, 0])
+print(t1)
+t2 = mr.FKinSpace(M2, [S1, S2, S2, S2, S2, S2], [0, 0, 0, 0, 0, 0])
+print(t2)
+"""R2 = rodriguez(S2, 0)
+p2 = ramirez(S2, 0)
 
-print("T")
-print(T)
-print("rodriguez")
-print(rodriguez(S1, math.pi))
-print("ramirez")
-print(ramirez(S1, 0))
+T2 = makeTMatrix(R2, p2)
+
+Tfinal = T * T2"""
+
+#print(T * M1)
+
+#print("T")
+#print(T)
+#print("rodriguez")
+#print(rodriguez(S1, math.pi))
+#print("ramirez")
+#print(ramirez(S1, 0))

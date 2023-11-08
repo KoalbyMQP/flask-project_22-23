@@ -12,10 +12,25 @@ robot, client_id = initSim.setup() if isSim else initRobot.setup()
 
 print("Setup Complete")
 
-setPoints = [[0], [90], [45], [90], [0]]
+setPoints = [[0], [math.pi/2], [math.pi/4], [math.pi/2], [0]]
 tj = trajPlanner.TrajPlannerNew(setPoints)
 traj = tj.getCubicTraj(5, 10)
 
+while True:
+    robot.motors[Joints.Left_Knee_Joint.value].move(90)
+
+startTime = time.time()
+for point in traj:
+    motorsTarget = point[1]
+    print(motorsTarget)
+    tarTime = point[0]
+    curTime = time.time()
+    while curTime - startTime <= tarTime:
+        robot.motors[Joints.Left_Knee_Joint.value].move(motorsTarget)
+        curTime = time.time()
+        # print(curTime - startTime)
+
+exit(0)
 
 xData = list()
 yData = list()
@@ -37,18 +52,6 @@ plt.xlabel("Time (seconds)")
 plt.ylabel("Position Error (radians)")
 plt.grid()
 plt.show()
-
-
-startTime = time.time()
-for point in traj:
-    motorsTarget = point[1]
-    print(motorsTarget)
-    tarTime = point[0]
-    curTime = time.time()
-    while curTime - startTime <= tarTime:
-        robot.motors[Joints.Left_Knee_Joint.value].move(motorsTarget)
-        curTime = time.time()
-        # print(curTime - startTime)
 
 
 """
