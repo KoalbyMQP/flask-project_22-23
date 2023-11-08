@@ -67,7 +67,6 @@ class TrajPlannerNew():
             # Appends calculated point to list
             waypoints[i-1,0] = wayPoint
         return waypoints
-    
 
     # Given the initial time, final time, initial position, final
     # position, and degree of path, returns Nth degree polynomial 

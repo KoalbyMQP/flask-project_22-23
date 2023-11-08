@@ -1,6 +1,6 @@
 import sys, time, math 
 sys.path.append("./")
-from backend.Testing import initSim, initRobot
+from backend.Testing import initSim, initRobot, trajPlanner
 from backend.KoalbyHumanoid.Robot import Joints
 from backend.LimbTrajectories.rightLegTraj import * # Old Traj Code, see bottom comment
 import matplotlib.pyplot as plt
@@ -11,9 +11,15 @@ isSim = True
 robot, client_id = initSim.setup() if isSim else initRobot.setup()
 
 print("Setup Complete")
-startTime = time.time()
+
+setPoints = [[0], [90], [45], [90], [0]]
+tj = trajPlanner.TrajPlannerNew(setPoints)
+traj = tj.getCubicTraj(5, 10)
+
+
 xData = list()
 yData = list()
+startTime = time.time()
 while time.time() - startTime < 5:
     # robot.motors[Joints.Right_Thigh_Kick_Joint.value].45move(90)
     # robot.motors[Joints.Right_Knee_Joint.value].move(-90)
@@ -33,6 +39,16 @@ plt.grid()
 plt.show()
 
 
+startTime = time.time()
+for point in traj:
+    motorsTarget = point[1]
+    print(motorsTarget)
+    tarTime = point[0]
+    curTime = time.time()
+    while curTime - startTime <= tarTime:
+        robot.motors[Joints.Left_Knee_Joint.value].move(motorsTarget)
+        curTime = time.time()
+        # print(curTime - startTime)
 
 
 """

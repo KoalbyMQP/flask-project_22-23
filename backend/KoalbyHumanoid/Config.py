@@ -50,7 +50,7 @@ motors = [
     [8, [0, 0], 'Herk', 'Left_Thigh_Abductor_Joint', [1,1,1], [1, 0, 10]],
     [4, [0, 0], 'Herk', 'Left_Thigh_Rotator_Joint', [1,1,1], [1, 0, 10]],
     [30, [0, 0], 'Herk', 'Left_Thigh_Kick_Joint', [1,1,1], [1, 0, 10]],
-    [20, [0, 0], 'Herk', 'Left_Knee_Joint', [1,1,1], [1, 0, 10]],
+    [20, [0, 0], 'Herk', 'Left_Knee_Joint', [1,1,1], [10, 0, 5]],
     [13, [0, 0], 'Herk', 'Left_Ankle_Joint', [1,1,1], [1, 0, 10]],
 
     # Head
