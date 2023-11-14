@@ -120,8 +120,12 @@ motorGroups = [
     ['r_leg', motors[13:20]]]
 
 links = [
-    #linkName, controlledBy, COM_TFrame, mass
-    [],
+    #linkName, controlledBy, Twist, HomeConfig, Mass
+    ["rightShoulder", "Right_Shoulder_Rotator_Joint",  [-1, 0, 0, 0, -76, 73], [
+                                                                                [1, 0, 0, -101.09],
+                                                                                [0, 1, 0, 74.53],
+                                                                                [0, 0, 1, 67.02],
+                                                                                [1, 0, 0, 1]]],
     [],
     [],
 ]

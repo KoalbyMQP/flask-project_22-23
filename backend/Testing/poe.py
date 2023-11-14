@@ -26,7 +26,7 @@ def makeTMatrix(R, p):
     return T
 
 #Twists of Joints
-S1 = [1, 0, 0, 0, 67.02, -74.53]
+S1 = [-1, 0, 0, 0, -76, 73]
 M1 = [
     [1, 0, 0, -101.09],
     [0, 1, 0, 74.53],
@@ -54,26 +54,12 @@ M = [
     [0, 0, 0, 1]
 ]
 
-R = rodriguez(S1, math.pi)
-p = ramirez(S1, math.pi)
+theta1 = math.radians(0)
+theta2 = math.radians(0)
 
-theta1 = math.pi / 6
-t1 = mr.FKinSpace(M1, [S1, S1, S1, S1, S1, S1], [0, 0, 0, 0, 0, 0])
+t1 = mr.FKinSpace(M1, [S1], [theta1])
 print(t1)
-t2 = mr.FKinSpace(M2, [S1, S2, S2, S2, S2, S2], [0, 0, 0, 0, 0, 0])
+t2 = mr.FKinSpace(M2, [S1, S2], [theta1, theta2])
 print(t2)
-"""R2 = rodriguez(S2, 0)
-p2 = ramirez(S2, 0)
-
-T2 = makeTMatrix(R2, p2)
-
-Tfinal = T * T2"""
-
-#print(T * M1)
-
-#print("T")
-#print(T)
-#print("rodriguez")
-#print(rodriguez(S1, math.pi))
-#print("ramirez")
-#print(ramirez(S1, 0))
+CoMx = (t1[0,3]*10.17 + t2[0,3]*71.23) / (10.17 + 71.23) 
+print(CoMx)
