@@ -17,45 +17,45 @@ Motor 13 - Herkluex, Abdomen
 
 '''Array of all motors for Koalby.'''
 motors = [
-#   [motorID, angleLimit, motorType, jointName, realPID, simPID]
+#   [motorID, angleLimit, motorType, jointName, realPID, simPID, twist]
     # Right Arm
-    [1, [0, 0], 'Herk', 'Right_Shoulder_Rotator_Joint', [1,1,1], [1, 0, 10]],
-    [2, [0, 0], 'Herk', 'Right_Shoulder_Abductor_Joint', [1,1,1], [1, 0, 10]],
-    [3, [0, 0], 'Herk', 'Right_Upper_Arm_Rotator_Joint', [1,1,1], [1, 0, 10]],
-    [15, [0, 0], 'Herk', 'Right_Elbow_Joint', [1,1,1], [1, 0, 10]],
-    [25, [0,0], 'Herk', 'Right_Wrist_Joint', [1,1,1], [1, 0, 10]],
+    [1, [0, 0], 'Herk', 'Right_Shoulder_Rotator_Joint', [1,1,1], [1, 0, 10], [-1, 0, 0, 0, -76, 73]],
+    [2, [0, 0], 'Herk', 'Right_Shoulder_Abductor_Joint', [1,1,1], [1, 0, 10], [0, 0, -1, -73.05, -119.1, 0]],
+    [3, [0, 0], 'Herk', 'Right_Upper_Arm_Rotator_Joint', [1,1,1], [1, 0, 10], [1, 0, 0, 0, 76.65, -72]],
+    [15, [0, 0], 'Herk', 'Right_Elbow_Joint', [1,1,1], [1, 0, 10], [0, 1, 0, -64.63, 0, 247.17]],
+    [25, [0,0], 'Herk', 'Right_Wrist_Joint', [1,1,1], [1, 0, 10], []],
 
     # Left Arm
-    [11, [0, 0], 'Herk', 'Left_Shoulder_Rotator_Joint', [1,1,1], [1, 0, 10]],
-    [10, [0, 0], 'Herk', 'Left_Shoulder_Abductor_Joint', [1,1,1], [1, 0, 10]],
-    [6, [0, 0], 'Herk', 'Left_Upper_Arm_Rotator_Joint', [1,1,1], [1, 0, 10]],
-    [7, [0, 0], 'Herk', 'Left_Elbow_Joint', [1,1,1], [1, 0, 10]],
-    [26, [0,0], 'Herk', 'Left_Wrist_Joint', [1,1,1], [1, 0, 10]],
+    [11, [0, 0], 'Herk', 'Left_Shoulder_Rotator_Joint', [1,1,1], [1, 0, 10], []],
+    [10, [0, 0], 'Herk', 'Left_Shoulder_Abductor_Joint', [1,1,1], [1, 0, 10], []],
+    [6, [0, 0], 'Herk', 'Left_Upper_Arm_Rotator_Joint', [1,1,1], [1, 0, 10], []],
+    [7, [0, 0], 'Herk', 'Left_Elbow_Joint', [1,1,1], [1, 0, 10], []],
+    [26, [0,0], 'Herk', 'Left_Wrist_Joint', [1,1,1], [1, 0, 10], []],
 
     # Torso
-    [17, [0, 0], 'Herk', 'Lower_Torso_Front2Back_Joint', [1,1,1], [1, 0, 10]],
-    [18, [0, 0], 'Herk', 'Chest_Side2Side_Joint', [1,1,1], [1, 0, 10]],
+    [17, [0, 0], 'Herk', 'Lower_Torso_Front2Back_Joint', [1,1,1], [1, 0, 10], []],
+    [18, [0, 0], 'Herk', 'Chest_Side2Side_Joint', [1,1,1], [1, 0, 10], []],
     [19, [0, 0], 'Herk', 'Upper_Torso_RotatorJoint'],
-    [21, [0, 0], 'Herk', 'Lower_Torso_Side2Side_Joint', [1,1,1], [10.0, 0.0, 50.0]],
-    [23, [0, 0], 'Herk', 'Upper_Torso_Rotator_Joint', [1,1,1], [1, 0, 10]],
+    [21, [0, 0], 'Herk', 'Lower_Torso_Side2Side_Joint', [1,1,1], [10.0, 0.0, 50.0], []],
+    [23, [0, 0], 'Herk', 'Upper_Torso_Rotator_Joint', [1,1,1], [1, 0, 10], []],
 
     # Right Leg
-    [9, [0, 0], 'Herk', 'Right_Thigh_Abductor_Joint', [1,1,1], [1, 0, 10]],
-    [14, [0, 0], 'Herk', 'Right_Thigh_Rotator_Joint', [1,1,1], [1, 0, 10]],
-    [31, [0, 0], 'Herk', 'Right_Thigh_Kick_Joint', [1,1,1], [5, 0, 5]], #17
-    [12, [0, 0], 'Herk', 'Right_Knee_Joint', [1,1,1], [20, 0, 0]], #18
-    [5, [0, 0], 'Herk', 'Right_Ankle_Joint', [1,1,1], [1, 0, 10]], #19
+    [9, [0, 0], 'Herk', 'Right_Thigh_Abductor_Joint', [1,1,1], [1, 0, 10], []],
+    [14, [0, 0], 'Herk', 'Right_Thigh_Rotator_Joint', [1,1,1], [1, 0, 10], []],
+    [31, [0, 0], 'Herk', 'Right_Thigh_Kick_Joint', [1,1,1], [5, 0, 5], []], #17
+    [12, [0, 0], 'Herk', 'Right_Knee_Joint', [1,1,1], [20, 0, 0], []], #18
+    [5, [0, 0], 'Herk', 'Right_Ankle_Joint', [1,1,1], [1, 0, 10], []], #19
 
     # Left Leg
-    [8, [0, 0], 'Herk', 'Left_Thigh_Abductor_Joint', [1,1,1], [1, 0, 10]],
-    [4, [0, 0], 'Herk', 'Left_Thigh_Rotator_Joint', [1,1,1], [1, 0, 10]],
-    [30, [0, 0], 'Herk', 'Left_Thigh_Kick_Joint', [1,1,1], [1, 0, 10]],
-    [20, [0, 0], 'Herk', 'Left_Knee_Joint', [1,1,1], [10, 0, 5]],
-    [13, [0, 0], 'Herk', 'Left_Ankle_Joint', [1,1,1], [1, 0, 10]],
+    [8, [0, 0], 'Herk', 'Left_Thigh_Abductor_Joint', [1,1,1], [1, 0, 10], []],
+    [4, [0, 0], 'Herk', 'Left_Thigh_Rotator_Joint', [1,1,1], [1, 0, 10], []],
+    [30, [0, 0], 'Herk', 'Left_Thigh_Kick_Joint', [1,1,1], [1, 0, 10], []],
+    [20, [0, 0], 'Herk', 'Left_Knee_Joint', [1,1,1], [10, 0, 5], []],
+    [13, [0, 0], 'Herk', 'Left_Ankle_Joint', [1,1,1], [1, 0, 10], []],
 
     # Head
-    [23, [0, 0], 'Dyn', 'Neck_Forward2Back_Joint', [1,1,1], [1, 0, 10]],
-    [24, [0, 0], 'Dyn', 'Neck_Rotator_Joint', [1,1,1], [1, 0, 10]]
+    [23, [0, 0], 'Dyn', 'Neck_Forward2Back_Joint', [1,1,1], [1, 0, 10], []],
+    [24, [0, 0], 'Dyn', 'Neck_Rotator_Joint', [1,1,1], [1, 0, 10], []]
 
     # # Right Arm
     # [3, [0, 0], 'Herk', 'Right_Shoulder_Rotator_Joint'],
@@ -119,13 +119,24 @@ motorGroups = [
     ['torso', motors[8:13]],
     ['r_leg', motors[13:20]]]
 
-links = [
-    #linkName, controlledBy, Twist, HomeConfig, Mass
-    ["rightShoulder", "Right_Shoulder_Rotator_Joint",  [-1, 0, 0, 0, -76, 73], [
-                                                                                [1, 0, 0, -101.09],
-                                                                                [0, 1, 0, 74.53],
-                                                                                [0, 0, 1, 67.02],
-                                                                                [1, 0, 0, 1]]],
-    [],
-    [],
+rightArmLinks = [
+    #linkName, controlledBy, Mass, HomeConfig(4x4)
+
+    #Right Arm
+    ["rightShoulderRotatorLink", motors[0], 10.17, [[1, 0, 0, -101.09],
+                                                    [0, 1, 0, 74.53],
+                                                    [0, 0, 1, 67.02],
+                                                    [1, 0, 0, 1]]],
+    ["rightShoulderAbductor", motors[1], 71.23, [[1, 0, 0, -127.29],
+                                                [0, 1, 0, 72.44],
+                                                [0, 0, 1, 62.05],
+                                                [1, 0, 0, 1]]],
+    ["rightUpperArmRotator", motors[2], 206.87, [[1, 0, 0, -229.68],
+                                                [0, 1, 0, 71.22],
+                                                [0, 0, 1, 67.37],
+                                                [0, 0, 0, 1]]],
+    ["rightElbow", motors[3], 235.84, [[1,0,0,-330.19],
+                                        [0,1,0,73.82],
+                                        [0,0,1,54.34],
+                                        [0,0,0,1]]]
 ]
