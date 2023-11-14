@@ -7,6 +7,7 @@ from backend.ArduinoSerial import ArduinoSerial
 from backend.KoalbyHumanoid.Motor import RealMotor, SimMotor
 from backend.Simulation import sim as vrep
 from backend.KoalbyHumanoid.Sensors.PiratedCode import Kalman_EKF as KM
+from backend.Testing import poe as poe
 
 class Joints(Enum):
     Right_Shoulder_Rotator_Joint = 0
@@ -45,6 +46,7 @@ class Joints(Enum):
     # Head
     Neck_Forward2Back_Joint = 25
     Neck_Rotator_Joint = 26 
+
 class Robot(ABC):
     def __init__(self, is_real, motors):
         self.motors = motors
@@ -116,6 +118,7 @@ class SimRobot(Robot):
         self.client_id = client_id
         self.motors = self.motors_init()
         super().__init__(False, self.motors)
+        self.CoM = self.updateCoM()
         self.primitives = []
         self.is_real = False
     
@@ -137,11 +140,10 @@ class SimRobot(Robot):
 
             #Sets each motor to streaming opmode
             print("Beginning to stream ", motor.motor_id)
-
             res = vrep.simx_return_novalue_flag
             while res != vrep.simx_return_ok:
                 res = vrep.simxGetJointPosition(self.client_id, motor.handle, vrep.simx_opmode_streaming)[0]
-           
+            motor.theta = motor.get_position()
             motors.append(motor)
         return motors
 
@@ -154,6 +156,10 @@ class SimRobot(Robot):
             for motor in self.motors:
                 if str(motor.motor_id) == str(key):
                     motor.set_position(value, self.client_id)
+
+    def updateCoM(self):
+        poe.rightArmCoM(self)
+        pass
 
     def shutdown(self):
         vrep.simxStopSimulation(self.client_id, vrep.simx_opmode_oneshot)

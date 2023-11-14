@@ -20,12 +20,18 @@ class Motor(ABC):
 
 
 class SimMotor(Motor):
-    def __init__(self, motor_id, client_id, handle, pidGains):
+    def __init__(self, motor_id, client_id, handle, pidGains, link, twist):
         self.handle = handle
         # super().__init__(self, motor_id) # idk why this doesn't work/how to make it work
         self.motor_id = motor_id
         self.pidGains = pidGains
         self.client_id = client_id
+
+        self.link = link
+        self.twist = twist
+        self.theta = None
+
+        #Should we put this in a Controller Object? Then have the motor have a controller assigned to it?
         self.target = 0
         self.prevTime = 0
         self.prevError = 0
@@ -35,14 +41,14 @@ class SimMotor(Motor):
         self.errorMemoryIndex = 0
 
     def get_position(self):
-        """reads the motor's current position from the Simulation and returns the value in degrees"""
+        """reads the motor's current position from the Simulation and returns the value in Radians"""
         return vrep.simxGetJointPosition(self.client_id, self.handle, vrep.simx_opmode_buffer)[1]
 
     def set_position(self, position):
         """sends a desired motor position to the Simulation"""
         position = math.radians(position)
         # idk why you have to divide the motor position by a constant but it freaks out if not
-        # ^^^ From 22-23 Team. Kept it as a mark of shame lol
+        # ^^^ From 22-23 Team. Kept it as a mark of shame -23-24 team
         vrep.simxSetJointTargetPosition(self.client_id, self.handle, position, vrep.simx_opmode_streaming)
         # pose_time not used -- could do something with velocity but unsure if its necessary to go through
 

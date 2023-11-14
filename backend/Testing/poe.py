@@ -3,7 +3,7 @@ import numpy as np
 import math
 import sys
 sys.path.append("./")
-from backend.KoalbyHumanoid import Config, Robot
+from backend.KoalbyHumanoid import Config
 
 def rodriguez(twist, theta):
     # R = I + sin(theta) * [w] + (1-cos(theta)) * [w]^2
@@ -41,12 +41,13 @@ def calcCoMtest(tList, massList):
         weightZ += tList[i][2,3] * massList[i]
     return [weightX/massSum, weightY/massSum, weightZ/massSum]
 
-def calcCom():
+def rightArmCoM(thetaList):
+    print("Hi")
     Slist = []
-    for link in Config.rightArmLinks:
+    """for link in Config.rightArmLinks:
         Slist.append(link[1][6])
-        M = link[4]
-        mr.FKinSpace(M, Slist,)
+        M = link[3]
+        mr.FKinSpace(M, Slist,)"""
 
 
 #Twists of Joints
@@ -102,7 +103,6 @@ t4 = mr.FKinSpace(M4, [S1, S2, S3, S4], [theta1, theta2, theta3, theta4])
 tList = [t1, t2, t3, t4]
 massList = [10.17, 71.23, 206.87, 235.84]
 #print(calcCoM(tList, massList))
-calcCom()
 
 """
 CoMx = (0*618.15 + t1[0,3]*10.17 + t2[0,3]*71.23) / (10.17 + 71.23+618.15)
