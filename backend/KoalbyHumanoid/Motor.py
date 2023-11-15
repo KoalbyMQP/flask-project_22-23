@@ -3,6 +3,7 @@ arduino which directly controls the motors"""
 from abc import ABC, abstractmethod
 import math
 import time
+import numpy as np
 from backend.Simulation import sim as vrep
 
 
@@ -20,15 +21,16 @@ class Motor(ABC):
 
 
 class SimMotor(Motor):
-    def __init__(self, motor_id, client_id, handle, pidGains, link, twist):
+    def __init__(self, motor_id, client_id, handle, pidGains, twist, mass, home):
         self.handle = handle
         # super().__init__(self, motor_id) # idk why this doesn't work/how to make it work
         self.motor_id = motor_id
         self.pidGains = pidGains
         self.client_id = client_id
 
-        self.link = link
         self.twist = twist
+        self.mass = mass
+        self.home = np.array(home)
         self.theta = None
 
         #Should we put this in a Controller Object? Then have the motor have a controller assigned to it?
@@ -52,13 +54,13 @@ class SimMotor(Motor):
         vrep.simxSetJointTargetPosition(self.client_id, self.handle, position, vrep.simx_opmode_streaming)
         # pose_time not used -- could do something with velocity but unsure if its necessary to go through
 
-    def move(self, position=True):
+    def move(self, position="TARGET"):
         if time.perf_counter() - self.prevTime > 0.01:
-            if position:
+            if position == "TARGET":
                 position = self.target
             kP, kI, kD = self.pidGains
-            actual = vrep.simxGetJointPosition(self.client_id, self.handle, vrep.simx_opmode_buffer)[1]
-            error = position - actual
+            self.theta = self.get_position()
+            error = position - self.theta
             p = error * kP
             
             self.errorMemoryIndex %= self.errorMemorySize
@@ -74,6 +76,7 @@ class SimMotor(Motor):
                 self.effort = 4
             elif(self.effort < -4):
                 self.effort = -4"""
+            #print(self.effort)
             vrep.simxSetJointTargetVelocity(self.client_id, self.handle, self.effort, vrep.simx_opmode_streaming)
             self.prevError = error
             self.prevTime = time.perf_counter()

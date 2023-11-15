@@ -1,5 +1,4 @@
 class Link:
-    def __init__(self, CoM, mass, M):
-        self.CoM = CoM
+    def __init__(self, mass, M):
         self.mass = mass
         self.M = M

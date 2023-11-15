@@ -41,13 +41,24 @@ def calcCoMtest(tList, massList):
         weightZ += tList[i][2,3] * massList[i]
     return [weightX/massSum, weightY/massSum, weightZ/massSum]
 
-def rightArmCoM(thetaList):
-    print("Hi")
+def calcLimbCoM(motors):
+    massSum = 0
+    weightX = 0 
+    weightY = 0
+    weightZ = 0
     Slist = []
-    """for link in Config.rightArmLinks:
-        Slist.append(link[1][6])
-        M = link[3]
-        mr.FKinSpace(M, Slist,)"""
+    thetaList = []
+    for motor in motors:
+        Slist.append(motor.twist)
+        thetaList.append(motor.theta)
+        linkCoM = mr.FKinSpace(motor.home, Slist, thetaList)
+        weightX += linkCoM[0,3] * motor.mass
+        weightY += linkCoM[1,3] * motor.mass
+        weightZ += linkCoM[2,3] * motor.mass
+        massSum += motor.mass
+    return [weightX/massSum, weightY/massSum, weightZ/massSum]
+
+
 
 
 #Twists of Joints
@@ -102,7 +113,8 @@ t4 = mr.FKinSpace(M4, [S1, S2, S3, S4], [theta1, theta2, theta3, theta4])
 
 tList = [t1, t2, t3, t4]
 massList = [10.17, 71.23, 206.87, 235.84]
-#print(calcCoM(tList, massList))
+print(t4)
+print(calcCoMtest(tList, massList))
 
 """
 CoMx = (0*618.15 + t1[0,3]*10.17 + t2[0,3]*71.23) / (10.17 + 71.23+618.15)

@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from enum import Enum
 
 import backend.KoalbyHumanoid.Config as Config
+from backend.KoalbyHumanoid.Link import Link
 from backend.ArduinoSerial import ArduinoSerial
 from backend.KoalbyHumanoid.Motor import RealMotor, SimMotor
 from backend.Simulation import sim as vrep
@@ -117,8 +118,8 @@ class SimRobot(Robot):
     def __init__(self, client_id):
         self.client_id = client_id
         self.motors = self.motors_init()
+        self.CoM = 0
         super().__init__(False, self.motors)
-        self.CoM = self.updateCoM()
         self.primitives = []
         self.is_real = False
     
@@ -129,13 +130,9 @@ class SimRobot(Robot):
         for motorConfig in Config.motors:
             if motorConfig[0] == 19: ## Motor does not exist in CoppeliaSim but does exist in Config.py. I am hesitant to delete it, so this is a bandaid fix. -Scott
                 continue
-            # handle = vrep.simxGetObjectHandle(self.client_id, motorConfig[3], vrep.simx_opmode_blocking)[1]
-            # print(self.client_id)
-            vrep.simxSetObjectFloatParameter(self.client_id, vrep.simxGetObjectHandle(self.client_id, motorConfig[3],
-                                                                                      vrep.simx_opmode_blocking)[1],
-                                             vrep.sim_shapefloatparam_mass, 1,
-                                             vrep.simx_opmode_blocking)
-            motor = SimMotor(motorConfig[0], self.client_id, vrep.simxGetObjectHandle(self.client_id, motorConfig[3], vrep.simx_opmode_blocking)[1], motorConfig[5])
+            handle = vrep.simxGetObjectHandle(self.client_id, motorConfig[3], vrep.simx_opmode_blocking)[1]
+            vrep.simxSetObjectFloatParameter(self.client_id, handle, vrep.sim_shapefloatparam_mass, 1, vrep.simx_opmode_blocking)
+            motor = SimMotor(motorConfig[0], self.client_id, handle, motorConfig[5], motorConfig[6], motorConfig[7], motorConfig[8])
             setattr(SimRobot, motorConfig[3], motor)
 
             #Sets each motor to streaming opmode
@@ -157,9 +154,33 @@ class SimRobot(Robot):
                 if str(motor.motor_id) == str(key):
                     motor.set_position(value, self.client_id)
 
-    def updateCoM(self):
-        poe.rightArmCoM(self)
-        pass
+    def updateRobotCoM(self):
+        rightArm = self.updateRightArmCoM()
+        leftArm = self.updateLeftArmCoM()
+        torso = self.updateTorsoCoM()
+        chestMass = 618.15
+        chest = [0, 71.83, 54.35]
+        rightArmMass = 524.11
+        leftArmMass = 524.11
+        torsoMass = 434.67
+        massSum = rightArmMass+leftArmMass+torsoMass+chestMass
+        CoMx = rightArm[0] * rightArmMass + leftArm[0] * leftArmMass + torso[0]*torsoMass + chest[0]*chestMass
+        CoMy = rightArm[1] * rightArmMass + leftArm[1] * leftArmMass + torso[1]*torsoMass + chest[1]*chestMass
+        CoMz = rightArm[2] * rightArmMass + leftArm[2] * leftArmMass + torso[2]*torsoMass + chest[2]*chestMass
+        self.CoM = [CoMx / massSum, CoMy / massSum, CoMz / massSum]
+        return self.CoM
+
+    def updateRightArmCoM(self):
+        motorList = [self.motors[0], self.motors[1], self.motors[2], self.motors[3]]
+        return poe.calcLimbCoM(motorList)
+    
+    def updateLeftArmCoM(self):
+        motorList = [self.motors[5], self.motors[6], self.motors[7], self.motors[8]]
+        return poe.calcLimbCoM(motorList)
+    
+    def updateTorsoCoM(self):
+        motorList = [self.motors[11], self.motors[13], self.motors[10], self.motors[12]]
+        return poe.calcLimbCoM(motorList)
 
     def shutdown(self):
         vrep.simxStopSimulation(self.client_id, vrep.simx_opmode_oneshot)

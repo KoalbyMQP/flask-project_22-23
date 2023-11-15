@@ -1,9 +1,10 @@
 import sys, time, math 
 sys.path.append("./")
-from backend.Testing import initSim, initRobot, trajPlanner
+from backend.Testing import initSim, initRobot, trajPlanner, poe
 from backend.KoalbyHumanoid.Robot import Joints
 from backend.LimbTrajectories.rightLegTraj import * # Old Traj Code, see bottom comment
 import matplotlib.pyplot as plt
+
 
 # Edit to declare if you are testing the sim or the real robot
 isSim = True
@@ -16,8 +17,40 @@ setPoints = [[0], [math.pi/2], [math.pi/4], [math.pi/2], [0]]
 tj = trajPlanner.TrajPlannerNew(setPoints)
 traj = tj.getCubicTraj(5, 10)
 
+robot.motors[Joints.Right_Thigh_Kick_Joint.value].target = math.radians(10)
+robot.motors[Joints.Right_Knee_Joint.value].target = math.radians(-20)
+robot.motors[Joints.Right_Ankle_Joint.value].target = math.radians(10)
+
+robot.motors[Joints.Left_Thigh_Kick_Joint.value].target = math.radians(10)
+robot.motors[Joints.Left_Knee_Joint.value].target = math.radians(-20)
+robot.motors[Joints.Left_Ankle_Joint.value].target = math.radians(10)
+
+state = 0
+prevTime = time.time()
+print("Here")
+vrep.simxStartSimulation(client_id, operationMode=vrep.simx_opmode_oneshot)
 while True:
-    robot.motors[Joints.Left_Knee_Joint.value].move(90)
+    time.sleep(0.01)
+    print(robot.updateRobotCoM())
+    """match state:
+        case 0:
+            if time.time() - prevTime > 5:
+                prevTime = time.time()
+                state = 1
+                continue
+            robot.motors[Joints.Right_Shoulder_Abductor_Joint.value].target = (math.pi/2)
+            robot.motors[Joints.Left_Shoulder_Abductor_Joint.value].target = (-math.pi/2)
+            robot.motors[Joints.Right_Shoulder_Rotator_Joint.value].target = (0)
+        case 1:
+            if time.time() - prevTime > 5:
+                prevTime = time.time()
+                state = 0
+                continue
+            robot.motors[Joints.Right_Shoulder_Abductor_Joint.value].target = (0)
+            robot.motors[Joints.Left_Shoulder_Abductor_Joint.value].target = (0)
+            robot.motors[Joints.Right_Shoulder_Rotator_Joint.value].target = (0)"""
+    robot.moveAllToTarget()
+    
 
 startTime = time.time()
 for point in traj:
