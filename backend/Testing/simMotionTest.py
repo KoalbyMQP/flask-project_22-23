@@ -13,53 +13,41 @@ robot, client_id = initSim.setup() if isSim else initRobot.setup()
 
 print("Setup Complete")
 
-setPoints = [[0], [math.pi/2], [math.pi/4], [math.pi/2], [0]]
+setPoints = [[0], [-math.pi/2], [-math.pi/4], [-math.pi/2], [0]]
 tj = trajPlanner.TrajPlannerNew(setPoints)
 traj = tj.getCubicTraj(5, 10)
 
-robot.motors[Joints.Right_Thigh_Kick_Joint.value].target = math.radians(10)
-robot.motors[Joints.Right_Knee_Joint.value].target = math.radians(-20)
-robot.motors[Joints.Right_Ankle_Joint.value].target = math.radians(10)
+"""robot.motors[Joints.Right_Thigh_Kick_Joint.value].target = math.radians(-30)
+robot.motors[Joints.Right_Knee_Joint.value].target = math.radians(60)
+robot.motors[Joints.Right_Ankle_Joint.value].target = math.radians(30)
 
-robot.motors[Joints.Left_Thigh_Kick_Joint.value].target = math.radians(10)
-robot.motors[Joints.Left_Knee_Joint.value].target = math.radians(-20)
-robot.motors[Joints.Left_Ankle_Joint.value].target = math.radians(10)
+robot.motors[Joints.Left_Thigh_Kick_Joint.value].target = math.radians(30)
+robot.motors[Joints.Left_Knee_Joint.value].target = math.radians(-60)
+robot.motors[Joints.Left_Ankle_Joint.value].target = math.radians(-30)"""
 
+robot.motors[1].target = math.radians(80)
+robot.motors[6].target = math.radians(-80)
+
+robot.motors[14].target = 0
 state = 0
 prevTime = time.time()
-print("Here")
 vrep.simxStartSimulation(client_id, operationMode=vrep.simx_opmode_oneshot)
 while True:
     time.sleep(0.01)
     print(robot.updateRobotCoM())
-    """match state:
-        case 0:
-            if time.time() - prevTime > 5:
-                prevTime = time.time()
-                state = 1
-                continue
-            robot.motors[Joints.Right_Shoulder_Abductor_Joint.value].target = (math.pi/2)
-            robot.motors[Joints.Left_Shoulder_Abductor_Joint.value].target = (-math.pi/2)
-            robot.motors[Joints.Right_Shoulder_Rotator_Joint.value].target = (0)
-        case 1:
-            if time.time() - prevTime > 5:
-                prevTime = time.time()
-                state = 0
-                continue
-            robot.motors[Joints.Right_Shoulder_Abductor_Joint.value].target = (0)
-            robot.motors[Joints.Left_Shoulder_Abductor_Joint.value].target = (0)
-            robot.motors[Joints.Right_Shoulder_Rotator_Joint.value].target = (0)"""
+    robot.balance()
     robot.moveAllToTarget()
-    
+
+
 
 startTime = time.time()
 for point in traj:
     motorsTarget = point[1]
-    print(motorsTarget)
+    #print(motorsTarget)
     tarTime = point[0]
     curTime = time.time()
     while curTime - startTime <= tarTime:
-        robot.motors[Joints.Left_Knee_Joint.value].move(motorsTarget)
+        robot.motors[Joints.Right_Shoulder_Rotator_Joint.value].move(motorsTarget)
         curTime = time.time()
         # print(curTime - startTime)
 

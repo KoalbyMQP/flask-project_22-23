@@ -1,4 +1,5 @@
 import time
+import math
 from abc import ABC, abstractmethod
 from enum import Enum
 
@@ -54,6 +55,7 @@ class Robot(ABC):
         print("Robot Created and Initialized")
         self.is_real = is_real
         self.sys = KM.System()
+        self.prevTime = time.perf_counter()
 
     def get_motor(self, key):
         for motor in self.motors:
@@ -118,6 +120,7 @@ class SimRobot(Robot):
     def __init__(self, client_id):
         self.client_id = client_id
         self.motors = self.motors_init()
+        self.gyro = self.gyro_init()
         self.CoM = 0
         super().__init__(False, self.motors)
         self.primitives = []
@@ -128,8 +131,8 @@ class SimRobot(Robot):
     def motors_init(self):
         motors = list()
         for motorConfig in Config.motors:
-            if motorConfig[0] == 19: ## Motor does not exist in CoppeliaSim but does exist in Config.py. I am hesitant to delete it, so this is a bandaid fix. -Scott
-                continue
+            #if motorConfig[0] == 19: ## Motor does not exist in CoppeliaSim but does exist in Config.py. I am hesitant to delete it, so this is a bandaid fix. -Scott
+            #    continue
             handle = vrep.simxGetObjectHandle(self.client_id, motorConfig[3], vrep.simx_opmode_blocking)[1]
             vrep.simxSetObjectFloatParameter(self.client_id, handle, vrep.sim_shapefloatparam_mass, 1, vrep.simx_opmode_blocking)
             motor = SimMotor(motorConfig[0], self.client_id, handle, motorConfig[5], motorConfig[6], motorConfig[7], motorConfig[8])
@@ -143,6 +146,16 @@ class SimRobot(Robot):
             motor.theta = motor.get_position()
             motors.append(motor)
         return motors
+
+    def gyro_init(self):
+        print("Getting IMU Data...")
+        vrep.simxGetFloatSignal(self.client_id, "gyroX", vrep.simx_opmode_streaming)[1]
+        vrep.simxGetFloatSignal(self.client_id, "gyroY", vrep.simx_opmode_streaming)[1]
+        vrep.simxGetFloatSignal(self.client_id, "gyroZ", vrep.simx_opmode_streaming)[1]
+        res = vrep.simx_return_novalue_flag
+        while res != vrep.simx_return_ok:
+            res = vrep.simxGetFloatSignal(self.client_id, "gyroZ", vrep.simx_opmode_streaming)[1]
+
 
     def update_motors(self, pose_time_millis, motor_positions_dict):
         """
@@ -158,15 +171,19 @@ class SimRobot(Robot):
         rightArm = self.updateRightArmCoM()
         leftArm = self.updateLeftArmCoM()
         torso = self.updateTorsoCoM()
+        rightLeg = self.updateRightLegCoM()
+        leftLeg = self.updateLeftLegCoM()
         chestMass = 618.15
         chest = [0, 71.83, 54.35]
         rightArmMass = 524.11
         leftArmMass = 524.11
         torsoMass = 434.67
+        rightLegMass = 883.81
+        leftLegMass = 889.11
         massSum = rightArmMass+leftArmMass+torsoMass+chestMass
-        CoMx = rightArm[0] * rightArmMass + leftArm[0] * leftArmMass + torso[0]*torsoMass + chest[0]*chestMass
-        CoMy = rightArm[1] * rightArmMass + leftArm[1] * leftArmMass + torso[1]*torsoMass + chest[1]*chestMass
-        CoMz = rightArm[2] * rightArmMass + leftArm[2] * leftArmMass + torso[2]*torsoMass + chest[2]*chestMass
+        CoMx = rightArm[0] * rightArmMass + leftArm[0] * leftArmMass + torso[0]*torsoMass + chest[0]*chestMass + rightLeg[0]*rightLegMass + leftLeg[0]*leftLegMass
+        CoMy = rightArm[1] * rightArmMass + leftArm[1] * leftArmMass + torso[1]*torsoMass + chest[1]*chestMass + rightLeg[1]*rightLegMass + leftLeg[1]*leftLegMass
+        CoMz = rightArm[2] * rightArmMass + leftArm[2] * leftArmMass + torso[2]*torsoMass + chest[2]*chestMass + rightLeg[2]*rightLegMass + leftLeg[2]*leftLegMass
         self.CoM = [CoMx / massSum, CoMy / massSum, CoMz / massSum]
         return self.CoM
 
@@ -179,20 +196,25 @@ class SimRobot(Robot):
         return poe.calcLimbCoM(motorList)
     
     def updateTorsoCoM(self):
-        motorList = [self.motors[11], self.motors[13], self.motors[10], self.motors[12]]
+        motorList = [self.motors[11], self.motors[13], self.motors[10], self.motors[12], self.motors[14]]
         return poe.calcLimbCoM(motorList)
+    
+    def updateRightLegCoM(self):
+        motorList = [self.motors[15], self.motors[16], self.motors[17], self.motors[18], self.motors[19]]
+        return poe.calcLegCoM(self, motorList)
+
+    def updateLeftLegCoM(self):
+        motorList = [self.motors[20], self.motors[21], self.motors[22], self.motors[23], self.motors[24]]
+        return poe.calcLegCoM(self, motorList)
+
 
     def shutdown(self):
         vrep.simxStopSimulation(self.client_id, vrep.simx_opmode_oneshot)
 
     def get_imu_data(self):
-        data = [vrep.simxGetFloatSignal(self.client_id, "gyroX", vrep.simx_opmode_streaming)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "gyroY", vrep.simx_opmode_streaming)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "gyroZ", vrep.simx_opmode_streaming)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "accelerometerX", vrep.simx_opmode_streaming)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "accelerometerY", vrep.simx_opmode_streaming)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "accelerometerZ", vrep.simx_opmode_streaming)[1] + .001, 1, 1,
-                1]
+        data = [vrep.simxGetFloatSignal(self.client_id, "gyroX", vrep.simx_opmode_buffer)[1] + .001,
+                vrep.simxGetFloatSignal(self.client_id, "gyroY", vrep.simx_opmode_buffer)[1] + .001,
+                vrep.simxGetFloatSignal(self.client_id, "gyroZ", vrep.simx_opmode_buffer)[1] + .001]
         # have to append 1 for magnetometer data because there isn't one in CoppeliaSim
         return data
 
@@ -225,6 +247,23 @@ class SimRobot(Robot):
     def moveAllToTarget(self):
         for motor in self.motors:
             motor.move(motor.target)
+
+    def balance(self):
+        pitch = self.get_imu_data()[0]
+        roll = self.get_imu_data()[1]
+        target = 0
+        Xerror = math.radians(target - pitch)
+        Yerror = math.radians(0 - roll)
+        self.motors[14].target += -(Xerror)
+        self.motors[10].target += (Xerror)
+        self.motors[11].target += (Yerror)
+
+        zCoM = self.CoM[2]
+        if zCoM > 92:
+            self.motors[Joints.Left_Thigh_Kick_Joint].target += 5
+            self.motors[Joints.Left_Ankle_Joint].target += 5
+            self.motors[Joints.Right_Thigh_Kick_Joint].target -= 5
+            self.motors[Joints.Right_Ankle_Joint].target -= 5
 
 
 class RealRobot(Robot):

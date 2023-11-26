@@ -58,6 +58,22 @@ def calcLimbCoM(motors):
         massSum += motor.mass
     return [weightX/massSum, weightY/massSum, weightZ/massSum]
 
+def calcLegCoM(robot, motors):
+    massSum = 0
+    weightX = 0 
+    weightY = 0
+    weightZ = 0
+    Slist = [robot.motors[11].twist, robot.motors[13].twist, robot.motors[10].twist, robot.motors[12].twist, robot.motors[14].twist]
+    thetaList = [robot.motors[11].theta, robot.motors[13].theta, robot.motors[10].theta, robot.motors[12].theta, robot.motors[14].theta]
+    for motor in motors:
+        Slist.append(motor.twist)
+        thetaList.append(motor.theta)
+        linkCoM = mr.FKinSpace(motor.home, Slist, thetaList)
+        weightX += linkCoM[0,3] * motor.mass
+        weightY += linkCoM[1,3] * motor.mass
+        weightZ += linkCoM[2,3] * motor.mass
+        massSum += motor.mass
+    return [weightX/massSum, weightY/massSum, weightZ/massSum]
 
 
 
