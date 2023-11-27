@@ -32,18 +32,18 @@ class Joints(Enum):
     Upper_Torso_Rotator_Joint = 13
 
     # Right Leg
-    Right_Thigh_Abductor_Joint = 14
-    Right_Thigh_Rotator_Joint = 15
-    Right_Thigh_Kick_Joint = 16
-    Right_Knee_Joint = 17
-    Right_Ankle_Joint = 18
+    Right_Thigh_Abductor_Joint = 15
+    Right_Thigh_Rotator_Joint = 16
+    Right_Thigh_Kick_Joint = 17
+    Right_Knee_Joint = 18
+    Right_Ankle_Joint = 19
 
     # Left Leg
-    Left_Thigh_Abductor_Joint = 19
-    Left_Thigh_Rotator_Joint = 20
-    Left_Thigh_Kick_Joint = 21
-    Left_Knee_Joint = 22
-    Left_Ankle_Joint = 23
+    Left_Thigh_Abductor_Joint = 20
+    Left_Thigh_Rotator_Joint = 21
+    Left_Thigh_Kick_Joint = 22
+    Left_Knee_Joint = 23
+    Left_Ankle_Joint = 24
 
     # Head
     Neck_Forward2Back_Joint = 25
@@ -256,14 +256,30 @@ class SimRobot(Robot):
         Yerror = math.radians(0 - roll)
         self.motors[14].target += -(Xerror)
         self.motors[10].target += (Xerror)
-        self.motors[11].target += (Yerror)
+        #self.motors[11].target += (Yerror)
 
-        zCoM = self.CoM[2]
-        if zCoM > 92:
-            self.motors[Joints.Left_Thigh_Kick_Joint].target += 5
-            self.motors[Joints.Left_Ankle_Joint].target += 5
-            self.motors[Joints.Right_Thigh_Kick_Joint].target -= 5
-            self.motors[Joints.Right_Ankle_Joint].target -= 5
+        targetZ = 88
+        zError = targetZ - self.CoM[2]
+        target = 0.19
+        actual = math.atan2(self.CoM[2] - 41.53, self.CoM[1] + 209.83)
+        error = target - actual
+        output = error * 4
+        #print(actual, error)
+        self.motors[22].target = output
+        self.motors[24].target = output
+        self.motors[17].target = -output
+        self.motors[19].target = -output
+        #print("Setting Target to:   ", self.motors[22].target)
+        """if abs(zError) > 2.5:
+            angle = math.radians(zError)
+            self.motors[22].target = math.radians(zError) #-
+            self.motors[24].target = math.radians(zError)
+            self.motors[17].target = -math.radians(zError) #+
+            self.motors[19].target = -math.radians(zError)
+            #print("Setting Target to:   ", self.motors[22].target)"""
+
+
+        
 
 
 class RealRobot(Robot):

@@ -17,14 +17,6 @@ setPoints = [[0], [-math.pi/2], [-math.pi/4], [-math.pi/2], [0]]
 tj = trajPlanner.TrajPlannerNew(setPoints)
 traj = tj.getCubicTraj(5, 10)
 
-"""robot.motors[Joints.Right_Thigh_Kick_Joint.value].target = math.radians(-30)
-robot.motors[Joints.Right_Knee_Joint.value].target = math.radians(60)
-robot.motors[Joints.Right_Ankle_Joint.value].target = math.radians(30)
-
-robot.motors[Joints.Left_Thigh_Kick_Joint.value].target = math.radians(30)
-robot.motors[Joints.Left_Knee_Joint.value].target = math.radians(-60)
-robot.motors[Joints.Left_Ankle_Joint.value].target = math.radians(-30)"""
-
 robot.motors[1].target = math.radians(80)
 robot.motors[6].target = math.radians(-80)
 
@@ -34,9 +26,15 @@ prevTime = time.time()
 vrep.simxStartSimulation(client_id, operationMode=vrep.simx_opmode_oneshot)
 while True:
     time.sleep(0.01)
-    print(robot.updateRobotCoM())
+    robot.updateRobotCoM() 
     robot.balance()
     robot.moveAllToTarget()
+    print(robot.CoM)
+    if time.time() - prevTime > 1:
+        robot.motors[0].target -= math.radians(2)
+        robot.motors[5].target -= math.radians(2)
+        #print(math.degrees(robot.motors[0].target))
+        prevTime = time.time()
 
 
 
