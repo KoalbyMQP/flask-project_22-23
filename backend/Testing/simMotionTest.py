@@ -21,18 +21,26 @@ robot.motors[1].target = math.radians(80)
 robot.motors[6].target = math.radians(-80)
 
 robot.motors[14].target = 0
-state = 0
+
+#robot.motors[17].target = math.radians(-45)
+#robot.motors[22].target = math.radians(45)
 prevTime = time.time()
 vrep.simxStartSimulation(client_id, operationMode=vrep.simx_opmode_oneshot)
+
+#robot.motors[0].target = -math.radians(90)
+
 while True:
     time.sleep(0.01)
     robot.updateRobotCoM() 
     robot.balance()
+    #print(robot.motors[0].prevError, robot.motors[0].effort)
     robot.moveAllToTarget()
-    print(robot.CoM)
+    #print(robot.CoM)
     if time.time() - prevTime > 1:
         robot.motors[0].target -= math.radians(2)
+        #robot.motors[3].target += math.radians(2)
         robot.motors[5].target -= math.radians(2)
+        #robot.motors[8].target += math.radians(2)
         #print(math.degrees(robot.motors[0].target))
         prevTime = time.time()
 

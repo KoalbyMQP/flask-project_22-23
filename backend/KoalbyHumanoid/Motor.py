@@ -71,7 +71,7 @@ class SimMotor(Motor):
             dedt = (error - self.prevError)# / (elapsedTime - self.prevTime )
             d = kD * dedt
             
-            self.effort = p + d
+            self.effort = p + i + d
             """if(self.effort > 4):
                 self.effort = 4
             elif(self.effort < -4):

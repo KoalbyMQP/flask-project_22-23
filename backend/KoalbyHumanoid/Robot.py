@@ -201,10 +201,12 @@ class SimRobot(Robot):
     
     def updateRightLegCoM(self):
         motorList = [self.motors[15], self.motors[16], self.motors[17], self.motors[18], self.motors[19]]
+        #print(poe.calcLegCoM(self, motorList))
         return poe.calcLegCoM(self, motorList)
 
     def updateLeftLegCoM(self):
         motorList = [self.motors[20], self.motors[21], self.motors[22], self.motors[23], self.motors[24]]
+        #print(poe.calcLegCoM(self, motorList))
         return poe.calcLegCoM(self, motorList)
 
 
@@ -251,32 +253,25 @@ class SimRobot(Robot):
     def balance(self):
         pitch = self.get_imu_data()[0]
         roll = self.get_imu_data()[1]
-        target = 0
-        Xerror = math.radians(target - pitch)
-        Yerror = math.radians(0 - roll)
+        Xtarget = 0
+        Ytarget = 0
+        Xerror = math.radians(Xtarget - pitch)
+        Yerror = math.radians(Ytarget - roll)
         self.motors[14].target += -(Xerror)
         self.motors[10].target += (Xerror)
-        #self.motors[11].target += (Yerror)
+        self.motors[11].target += (Yerror)
 
         targetZ = 88
         zError = targetZ - self.CoM[2]
-        target = 0.19
-        actual = math.atan2(self.CoM[2] - 41.53, self.CoM[1] + 209.83)
+        target = 0.11
+        actual = math.atan2(self.CoM[2] - 41.53, 209.83-self.CoM[1])
         error = target - actual
-        output = error * 4
-        #print(actual, error)
+        output = error * 1
+        #print(actual, error, output)
         self.motors[22].target = output
         self.motors[24].target = output
         self.motors[17].target = -output
         self.motors[19].target = -output
-        #print("Setting Target to:   ", self.motors[22].target)
-        """if abs(zError) > 2.5:
-            angle = math.radians(zError)
-            self.motors[22].target = math.radians(zError) #-
-            self.motors[24].target = math.radians(zError)
-            self.motors[17].target = -math.radians(zError) #+
-            self.motors[19].target = -math.radians(zError)
-            #print("Setting Target to:   ", self.motors[22].target)"""
 
 
         
