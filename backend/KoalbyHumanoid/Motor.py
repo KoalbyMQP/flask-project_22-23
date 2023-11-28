@@ -27,6 +27,7 @@ class SimMotor(Motor):
         self.motor_id = motor_id
         self.pidGains = pidGains
         self.client_id = client_id
+        self.name = ""
 
         self.twist = twist
         self.mass = mass

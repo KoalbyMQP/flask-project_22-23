@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from enum import Enum
 
 import backend.KoalbyHumanoid.Config as Config
+import modern_robotics as mr
 from backend.KoalbyHumanoid.Link import Link
 from backend.ArduinoSerial import ArduinoSerial
 from backend.KoalbyHumanoid.Motor import RealMotor, SimMotor
@@ -125,8 +126,42 @@ class SimRobot(Robot):
         super().__init__(False, self.motors)
         self.primitives = []
         self.is_real = False
-    
+        self.chain = self.chain_init()  
         # print(client_id)
+
+    def chain_init(self):
+        chain = {
+        self.motors[24].name:self.motors[23],
+        self.motors[23].name:self.motors[22],
+        self.motors[22].name:self.motors[21],
+        self.motors[21].name:self.motors[20],
+        self.motors[20].name:self.motors[10],
+
+        self.motors[19].name:self.motors[18],
+        self.motors[18].name:self.motors[17],
+        self.motors[17].name:self.motors[16],
+        self.motors[16].name:self.motors[15],
+        self.motors[15].name:self.motors[10],
+
+        self.motors[10].name:self.motors[13],
+        self.motors[13].name:self.motors[12],
+        self.motors[12].name:self.motors[14],
+        self.motors[14].name:self.motors[11],
+        self.motors[11].name:"base",
+
+        self.motors[4].name:self.motors[3],
+        self.motors[3].name:self.motors[2],
+        self.motors[2].name:self.motors[1],
+        self.motors[1].name:self.motors[0],
+        self.motors[0].name:"base",
+
+        self.motors[9].name:self.motors[8],
+        self.motors[8].name:self.motors[7],
+        self.motors[7].name:self.motors[6],
+        self.motors[6].name:self.motors[5],
+        self.motors[5].name:"base"
+        }
+        return chain
 
     def motors_init(self):
         motors = list()
@@ -144,6 +179,7 @@ class SimRobot(Robot):
             while res != vrep.simx_return_ok:
                 res = vrep.simxGetJointPosition(self.client_id, motor.handle, vrep.simx_opmode_streaming)[0]
             motor.theta = motor.get_position()
+            motor.name = motorConfig[3]
             motors.append(motor)
         return motors
 
@@ -214,9 +250,9 @@ class SimRobot(Robot):
         vrep.simxStopSimulation(self.client_id, vrep.simx_opmode_oneshot)
 
     def get_imu_data(self):
-        data = [vrep.simxGetFloatSignal(self.client_id, "gyroX", vrep.simx_opmode_buffer)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "gyroY", vrep.simx_opmode_buffer)[1] + .001,
-                vrep.simxGetFloatSignal(self.client_id, "gyroZ", vrep.simx_opmode_buffer)[1] + .001]
+        data = [vrep.simxGetFloatSignal(self.client_id, "gyroX", vrep.simx_opmode_buffer)[1],
+                vrep.simxGetFloatSignal(self.client_id, "gyroY", vrep.simx_opmode_buffer)[1],
+                vrep.simxGetFloatSignal(self.client_id, "gyroZ", vrep.simx_opmode_buffer)[1]]
         # have to append 1 for magnetometer data because there isn't one in CoppeliaSim
         return data
 
@@ -250,6 +286,24 @@ class SimRobot(Robot):
         for motor in self.motors:
             motor.move(motor.target)
 
+    def locate(self, motor):
+        slist = []
+        thetaList = []
+        slist.append(motor.twist)
+        thetaList.append(motor.theta)
+        home = motor.home
+        next = self.chain[motor.name]
+        while next != "base":
+            slist.append(next.twist)
+            thetaList.append(next.theta)
+            next = self.chain[next.name]
+        slist.reverse()
+        thetaList.reverse()
+        # print(thetaList)
+        location = mr.FKinSpace(home,slist,thetaList)
+        return location[0][0:3]
+        
+
     def balance(self):
         pitch = self.get_imu_data()[0]
         roll = self.get_imu_data()[1]
@@ -264,16 +318,22 @@ class SimRobot(Robot):
         targetZ = 88
         zError = targetZ - self.CoM[2]
         target = 0.11
-        actual = math.atan2(self.CoM[2] - 41.53, 209.83-self.CoM[1])
-        error = target - actual
-        output = error * 1
+        balancedTheta = math.atan2(41.53, 209.83)
+        kickMotorPos = self.locate(self.motors[Joints.Left_Thigh_Kick_Joint.value])
+        currTheta = math.atan2(self.CoM[2] - kickMotorPos[2], self.CoM[1] - kickMotorPos[1])
+        thetaError = currTheta - balancedTheta
+        self.motors[22].target = thetaError
+        self.motors[24].target = thetaError
+        self.motors[17].target = -thetaError
+        self.motors[19].target = -thetaError
+        # actual = math.atan2(self.CoM[2] - 41.53, 209.83 - self.CoM[1])
+        # error = target - actual
+        # output = error * 1
         #print(actual, error, output)
-        self.motors[22].target = output
-        self.motors[24].target = output
-        self.motors[17].target = -output
-        self.motors[19].target = -output
-
-
+        # self.motors[22].target = output
+        # self.motors[24].target = output
+        # self.motors[17].target = -output
+        # self.motors[19].target = -output
         
 
 
