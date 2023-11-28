@@ -301,10 +301,9 @@ class SimRobot(Robot):
         thetaList.reverse()
         # print(thetaList)
         location = mr.FKinSpace(home,slist,thetaList)
-        return location[0][0:3]
+        return location[0:3,3]
         
-
-    def balance(self):
+    def IMUBalance(self):
         pitch = self.get_imu_data()[0]
         roll = self.get_imu_data()[1]
         Xtarget = 0
@@ -315,25 +314,24 @@ class SimRobot(Robot):
         self.motors[10].target += (Xerror)
         self.motors[11].target += (Yerror)
 
-        targetZ = 88
-        zError = targetZ - self.CoM[2]
-        target = 0.11
-        balancedTheta = math.atan2(41.53, 209.83)
+    def balance(self):
+        self.IMUBalance()
+        # targetZ = 88
+        # zError = targetZ - self.CoM[2]
+        # target = 0.11
+        staticCoM = [-5.7919215528026395, -478.1476301728874, 77.13638385800057]
+        staticKickLoc = [93.54, -209.39, 41.53]
+        targetTheta = math.atan2(staticCoM[1] - staticKickLoc[1], staticCoM[2] - staticKickLoc[2])
         kickMotorPos = self.locate(self.motors[Joints.Left_Thigh_Kick_Joint.value])
-        currTheta = math.atan2(self.CoM[2] - kickMotorPos[2], self.CoM[1] - kickMotorPos[1])
-        thetaError = currTheta - balancedTheta
-        self.motors[22].target = thetaError
-        self.motors[24].target = thetaError
-        self.motors[17].target = -thetaError
-        self.motors[19].target = -thetaError
-        # actual = math.atan2(self.CoM[2] - 41.53, 209.83 - self.CoM[1])
-        # error = target - actual
-        # output = error * 1
-        #print(actual, error, output)
-        # self.motors[22].target = output
-        # self.motors[24].target = output
-        # self.motors[17].target = -output
-        # self.motors[19].target = -output
+        currTheta = math.atan2(self.CoM[1] - kickMotorPos[1], self.CoM[2] - kickMotorPos[2])
+        thetaError = targetTheta - currTheta
+        print(math.degrees(targetTheta), math.degrees(currTheta), thetaError, self.CoM)
+        # print(self.CoM)
+        # print(math.degrees(self.motors[22].target), math.degrees(self.motors[22].target), math.degrees(self.motors[17].target), math.degrees(self.motors[19].target))
+        self.motors[22].target = -thetaError
+        self.motors[24].target = -thetaError
+        self.motors[17].target = thetaError
+        self.motors[19].target = thetaError
         
 
 
