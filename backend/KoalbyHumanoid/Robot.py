@@ -299,7 +299,6 @@ class SimRobot(Robot):
             next = self.chain[next.name]
         slist.reverse()
         thetaList.reverse()
-        # print(thetaList)
         location = mr.FKinSpace(home,slist,thetaList)
         return location[0:3,3]
         
@@ -332,6 +331,25 @@ class SimRobot(Robot):
         self.motors[24].target = -thetaError
         self.motors[17].target = thetaError
         self.motors[19].target = thetaError
+        
+    def IK(self, motor, T, thetaGuess):
+        """Computes the Inverse Kinematics from the Body Frame to the desired end effector motor
+
+        Args:
+            eeMotor (SimMotor): Motor you want to calculate IK towards
+            T (4x4 Matrix): The desired final 4x4 matrix depicting the final position and orientation
+        """
+        Slist = []
+        Slist.append(motor.twist)
+        next = self.chain[motor.name]
+        while next != "base":
+            Slist.append(next.twist)
+            next = self.chain[next.name]
+        Slist.reverse()
+        M = motor.home
+        eomg = 0.01
+        ev = 0.01
+        return (mr.IKinSpace(Slist, M, T, thetaGuess, eomg, ev))
         
 
 
