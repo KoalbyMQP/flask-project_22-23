@@ -1,6 +1,7 @@
 import sys, time, math 
 sys.path.append("./")
-from backend.Testing import initSim, initRobot, trajPlanner, poe
+from backend.Testing import initSim, initRobot, trajPlanner
+from backend.Testing import inverseKinematics as IK
 from backend.KoalbyHumanoid.Robot import Joints
 from backend.LimbTrajectories.rightLegTraj import * # Old Traj Code, see bottom comment
 import matplotlib.pyplot as plt
@@ -26,6 +27,9 @@ robot.motors[14].target = 0
 #robot.motors[22].target = math.radians(45)
 prevTime = time.time()
 vrep.simxStartSimulation(client_id, operationMode=vrep.simx_opmode_oneshot)
+
+print(robot.locate(robot.motors[3]))
+
 
 #robot.motors[0].target = -math.radians(90)
 simStartTime = time.time()
