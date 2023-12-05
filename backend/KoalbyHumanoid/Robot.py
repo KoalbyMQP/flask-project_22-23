@@ -5,7 +5,7 @@ from enum import Enum
 
 import backend.KoalbyHumanoid.Config as Config
 import modern_robotics as mr
-from backend.KoalbyHumanoid.Link import Link
+from backend.KoalbyHumanoid.Link import RealLink, SimLink
 from backend.ArduinoSerial import ArduinoSerial
 from backend.KoalbyHumanoid.Motor import RealMotor, SimMotor
 from backend.Simulation import sim as vrep
@@ -126,9 +126,11 @@ class SimRobot(Robot):
         super().__init__(False, self.motors)
         self.primitives = []
         self.is_real = False
-        self.chain = self.chain_init()  
+        self.chain = self.chain_init()
+        self.links = self.links_init()
         # print(client_id)
 
+        # Placeholder need to make this set up the links
     def chain_init(self):
         chain = {
         self.motors[24].name:self.motors[23],
@@ -162,6 +164,13 @@ class SimRobot(Robot):
         self.motors[5].name:"base"
         }
         return chain
+    
+    def links_init(self):
+        links = list()
+        for linksConfig in Config.links:
+            link = SimLink(linksConfig[2], linksConfig[3], linksConfig[4])
+            links.append(link)
+        return links
 
     def motors_init(self):
         motors = list()
@@ -286,12 +295,25 @@ class SimRobot(Robot):
         for motor in self.motors:
             motor.move(motor.target)
 
-    def locate(self, motor):
+    def locate(self, link):
+        slist = []
+        thetaList = []
+        home = link.home
+        for motor in link.motors:
+            slist.append(motor.twist)
+            thetaList.append(motor.theta)
+        slist.reverse()
+        thetaList.reverse()
+        # print(thetaList)
+        location = mr.FKinSpace(home,slist,thetaList)
+        return location[0:3,3]
+    
+    def OldLocate(self, motor):
         slist = []
         thetaList = []
         slist.append(motor.twist)
         thetaList.append(motor.theta)
-        home = motor.home
+        home = motor.home # replace with origin of motor as motor.home is the CoM of link
         next = self.chain[motor.name]
         while next != "base":
             slist.append(next.twist)
@@ -325,13 +347,14 @@ class SimRobot(Robot):
         kickMotorPos = self.locate(self.motors[Joints.Left_Thigh_Kick_Joint.value])
         currTheta = math.atan2(self.CoM[1] - kickMotorPos[1], self.CoM[2] - kickMotorPos[2])
         thetaError = targetTheta - currTheta
-        print(math.degrees(targetTheta), math.degrees(currTheta), thetaError, self.CoM)
+        # print(math.degrees(targetTheta), math.degrees(currTheta), thetaError, self.CoM)
         # print(self.CoM)
         # print(math.degrees(self.motors[22].target), math.degrees(self.motors[22].target), math.degrees(self.motors[17].target), math.degrees(self.motors[19].target))
         self.motors[22].target = -thetaError
         self.motors[24].target = -thetaError
         self.motors[17].target = thetaError
         self.motors[19].target = thetaError
+        return thetaError
         
 
 
