@@ -1,19 +1,13 @@
-class Motor():
-    def __init__(self, mass, M, home):
+class Link():
+    def __init__(self, mass, M):
         self.mass = mass
         self.M = M
-        self.home = home
-        self.motors = []
-class SimLink(Motor):
-    def __init__(self, mass, M, home):
+class SimLink(Link):
+    def __init__(self, mass, M):
         self.mass = mass
         self.M = M
-        self.home = home
-        self.motors = []
 
-class RealLink(Motor):
-    def __init__(self, mass, M, home):
+class RealLink(Link):
+    def __init__(self, mass, M):
         self.mass = mass
         self.M = M
-        self.home = home
-        self.motors = []

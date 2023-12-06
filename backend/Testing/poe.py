@@ -34,43 +34,47 @@ def calcCoMtest(tList, massList):
     weightX = 0
     weightY = 618.15 * 71.83
     weightZ = 618.15 * 54.35
-    for i in range(0, len(tList)):
+    for i in range(len(tList)):
         massSum += massList[i]
         weightX += tList[i][0,3] * massList[i]
         weightY += tList[i][1,3] * massList[i]
         weightZ += tList[i][2,3] * massList[i]
     return [weightX/massSum, weightY/massSum, weightZ/massSum]
 
-def calcLimbCoM(motors):
+def calcLimbCoM(motors, links):
     massSum = 0
     weightX = 0 
     weightY = 0
     weightZ = 0
     Slist = []
     thetaList = []
-    for motor in motors:
+    for i in range(len(motors)):
+        motor = motors[i]
+        link = links[i]
         Slist.append(motor.twist)
         thetaList.append(motor.theta)
-        linkCoM = mr.FKinSpace(motor.home, Slist, thetaList)
-        weightX += linkCoM[0,3] * motor.mass
-        weightY += linkCoM[1,3] * motor.mass
-        weightZ += linkCoM[2,3] * motor.mass
-        massSum += motor.mass
+        linkCoM = mr.FKinSpace(link.M, Slist, thetaList)
+        weightX += linkCoM[0,3] * link.mass
+        weightY += linkCoM[1,3] * link.mass
+        weightZ += linkCoM[2,3] * link.mass
+        massSum += link.mass
     return [weightX/massSum, weightY/massSum, weightZ/massSum]
 
-def calcLegCoM(robot, motors):
+def calcLegCoM(robot, motors, links):
     massSum = 0
     weightX = 0 
     weightY = 0
     weightZ = 0
     Slist = [robot.motors[11].twist, robot.motors[13].twist, robot.motors[10].twist, robot.motors[12].twist, robot.motors[14].twist]
     thetaList = [robot.motors[11].theta, robot.motors[13].theta, robot.motors[10].theta, robot.motors[12].theta, robot.motors[14].theta]
-    for motor in motors:
+    for i in range(len(motors)):
+        motor = motors[i]
+        link = links[i]
         Slist.append(motor.twist)
         thetaList.append(motor.theta)
-        linkCoM = mr.FKinSpace(motor.home, Slist, thetaList)
-        weightX += linkCoM[0,3] * motor.mass
-        weightY += linkCoM[1,3] * motor.mass
-        weightZ += linkCoM[2,3] * motor.mass
-        massSum += motor.mass
+        linkCoM = mr.FKinSpace(link.M, Slist, thetaList)
+        weightX += linkCoM[0,3] * link.mass
+        weightY += linkCoM[1,3] * link.mass
+        weightZ += linkCoM[2,3] * link.mass
+        massSum += link.mass
     return [weightX/massSum, weightY/massSum, weightZ/massSum]

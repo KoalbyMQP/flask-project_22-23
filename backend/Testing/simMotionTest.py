@@ -14,13 +14,14 @@ robot, client_id = initSim.setup() if isSim else initRobot.setup()
 
 print("Setup Complete")
 
-setPoints = [[0,  0], [math.radians(-90), math.radians(-90)]]
+setPoints = [[0,  0], [math.radians(-90), math.radians(-90)], [0,  0]]
 tj = trajPlanner.TrajPlannerNew(setPoints)
 traj = tj.getCubicTraj(10, 100)
 
 robot.motors[1].target = math.radians(80)
 robot.motors[6].target = math.radians(-80)
-
+# robot.motors[3].target = math.radians(90)
+# robot.motors[8].target = math.radians(90)
 robot.motors[14].target = 0
 
 #robot.motors[17].target = math.radians(-45)
@@ -39,33 +40,34 @@ while time.time() - simStartTime < 5:
     robot.IMUBalance()
     robot.moveAllToTarget()
 
-errorData = []
-timeData = []
-startTime = time.time()
-for point in traj:
-    time.sleep(0.01)
-    robot.updateRobotCoM()
-    errorData.append(robot.balance())
-    timeData.append(time.time() - simStartTime)
-    #print(robot.motors[0].prevError, robot.motors[0].effort)
-    robot.moveAllToTarget()
-    #print(robot.CoM)
-
-    # print(point)
-    robot.motors[0].target = point[1]
-    # robot.motors[3].target += math.radians(2)
-    robot.motors[5].target = point[2]
-    # robot.motors[8].target += math.radians(2)
-    #print(math.degrees(robot.motors[0].target))
-    while time.time() - startTime < point[0]:
+while True:
+    errorData = []
+    timeData = []
+    startTime = time.time()
+    for point in traj:
         time.sleep(0.01)
-        robot.updateRobotCoM() 
-        errorData.append(robot.balance())
+        robot.updateRobotCoM()
+        errorData.append(robot.balanceAngle())
         timeData.append(time.time() - simStartTime)
         #print(robot.motors[0].prevError, robot.motors[0].effort)
         robot.moveAllToTarget()
-        #print(robot.locate(robot.motors[22]))
         #print(robot.CoM)
+
+        # print(point)
+        robot.motors[0].target = point[1]
+        # robot.motors[3].target += math.radians(2)
+        robot.motors[5].target = point[2]
+        # robot.motors[8].target += math.radians(2)
+        #print(math.degrees(robot.motors[0].target))
+        while time.time() - startTime < point[0]:
+            time.sleep(0.01)
+            robot.updateRobotCoM() 
+            errorData.append(robot.balanceAngle())
+            timeData.append(time.time() - simStartTime)
+            #print(robot.motors[0].prevError, robot.motors[0].effort)
+            robot.moveAllToTarget()
+            #print(robot.locate(robot.motors[22]))
+            #print(robot.CoM)
 print("done")
 
 plt.plot(timeData,errorData)

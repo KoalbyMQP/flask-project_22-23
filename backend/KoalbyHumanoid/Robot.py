@@ -6,11 +6,15 @@ from enum import Enum
 import backend.KoalbyHumanoid.Config as Config
 import modern_robotics as mr
 from backend.KoalbyHumanoid.Link import RealLink, SimLink
+from backend.KoalbyHumanoid.Limb import RealLimb, SimLimb
+from backend.KoalbyHumanoid.PID import PID
 from backend.ArduinoSerial import ArduinoSerial
 from backend.KoalbyHumanoid.Motor import RealMotor, SimMotor
 from backend.Simulation import sim as vrep
 from backend.KoalbyHumanoid.Sensors.PiratedCode import Kalman_EKF as KM
 from backend.Testing import poe as poe
+
+global prevAngleError
 
 class Joints(Enum):
     Right_Shoulder_Rotator_Joint = 0
@@ -128,7 +132,8 @@ class SimRobot(Robot):
         self.is_real = False
         self.chain = self.chain_init()
         self.links = self.links_init()
-        # print(client_id)
+        self.limbs = self.limbs_init()
+        self.PID = PID(0.3,0.1,0)
 
         # Placeholder need to make this set up the links
     def chain_init(self):
@@ -165,10 +170,17 @@ class SimRobot(Robot):
         }
         return chain
     
+    def limbs_init(self):
+        limbs = list()
+        for limbsConfig in Config.limbs:
+            limb = SimLimb(limbsConfig[1])
+            limbs.append(limb)
+        return limbs
+    
     def links_init(self):
         links = list()
         for linksConfig in Config.links:
-            link = SimLink(linksConfig[2], linksConfig[3], linksConfig[4])
+            link = SimLink(linksConfig[0], linksConfig[1])
             links.append(link)
         return links
 
@@ -179,7 +191,7 @@ class SimRobot(Robot):
             #    continue
             handle = vrep.simxGetObjectHandle(self.client_id, motorConfig[3], vrep.simx_opmode_blocking)[1]
             vrep.simxSetObjectFloatParameter(self.client_id, handle, vrep.sim_shapefloatparam_mass, 1, vrep.simx_opmode_blocking)
-            motor = SimMotor(motorConfig[0], self.client_id, handle, motorConfig[5], motorConfig[6], motorConfig[7], motorConfig[8])
+            motor = SimMotor(motorConfig[0], self.client_id, handle, motorConfig[5], motorConfig[6], motorConfig[7])
             setattr(SimRobot, motorConfig[3], motor)
 
             #Sets each motor to streaming opmode
@@ -233,26 +245,31 @@ class SimRobot(Robot):
         return self.CoM
 
     def updateRightArmCoM(self):
-        motorList = [self.motors[0], self.motors[1], self.motors[2], self.motors[3]]
-        return poe.calcLimbCoM(motorList)
+        motorList = [self.motors[0], self.motors[1], self.motors[2], self.motors[3], self.motors[4]]
+        linkList = [self.links[0], self.links[1], self.links[2], self.links[3], self.links[4]]
+        return poe.calcLimbCoM(motorList, linkList)
     
     def updateLeftArmCoM(self):
-        motorList = [self.motors[5], self.motors[6], self.motors[7], self.motors[8]]
-        return poe.calcLimbCoM(motorList)
+        motorList = [self.motors[5], self.motors[6], self.motors[7], self.motors[8], self.motors[9]]
+        linkList = [self.links[5], self.links[6], self.links[7], self.links[8], self.links[9]]
+        return poe.calcLimbCoM(motorList, linkList)
     
     def updateTorsoCoM(self):
         motorList = [self.motors[11], self.motors[13], self.motors[10], self.motors[12], self.motors[14]]
-        return poe.calcLimbCoM(motorList)
+        linkList = [self.links[11], self.links[13], self.links[10], self.links[12], self.links[14]]
+        return poe.calcLimbCoM(motorList, linkList)
     
     def updateRightLegCoM(self):
         motorList = [self.motors[15], self.motors[16], self.motors[17], self.motors[18], self.motors[19]]
+        linkList = [self.links[15], self.links[16], self.links[17], self.links[18], self.links[19]]
         #print(poe.calcLegCoM(self, motorList))
-        return poe.calcLegCoM(self, motorList)
+        return poe.calcLegCoM(self, motorList, linkList)
 
     def updateLeftLegCoM(self):
         motorList = [self.motors[20], self.motors[21], self.motors[22], self.motors[23], self.motors[24]]
+        linkList = [self.links[20], self.links[21], self.links[22], self.links[23], self.links[24]]
         #print(poe.calcLegCoM(self, motorList))
-        return poe.calcLegCoM(self, motorList)
+        return poe.calcLegCoM(self, motorList, linkList)
 
 
     def shutdown(self):
@@ -295,33 +312,21 @@ class SimRobot(Robot):
         for motor in self.motors:
             motor.move(motor.target)
 
-    def locate(self, link):
+    def locate(self, motor):
         slist = []
         thetaList = []
-        home = link.home
-        for motor in link.motors:
-            slist.append(motor.twist)
-            thetaList.append(motor.theta)
-        slist.reverse()
-        thetaList.reverse()
-        # print(thetaList)
-        location = mr.FKinSpace(home,slist,thetaList)
-        return location[0:3,3]
-    
-    def OldLocate(self, motor):
-        slist = []
-        thetaList = []
+        M = motor.M
         slist.append(motor.twist)
         thetaList.append(motor.theta)
-        home = motor.home # replace with origin of motor as motor.home is the CoM of link
         next = self.chain[motor.name]
         while next != "base":
             slist.append(next.twist)
             thetaList.append(next.theta)
-            next = self.chain[next.name]
+            next = self.chain[next.name]            
         slist.reverse()
         thetaList.reverse()
-        location = mr.FKinSpace(home,slist,thetaList)
+        # print(thetaList)
+        location = mr.FKinSpace(M,slist,thetaList)
         return location[0:3,3]
         
     def IMUBalance(self):
@@ -335,12 +340,37 @@ class SimRobot(Robot):
         self.motors[10].target += (Xerror)
         self.motors[11].target += (Yerror)
 
-    def balance(self):
+    def balanceAngle(self):
         self.IMUBalance()
         # targetZ = 88
         # zError = targetZ - self.CoM[2]
         # target = 0.11
         staticCoM = [-5.7919215528026395, -478.1476301728874, 77.13638385800057]
+        staticKickLoc = [93.54, -209.39, 41.53]
+        targetTheta = math.atan2(staticCoM[1] - staticKickLoc[1], staticCoM[2] - staticKickLoc[2])
+        kickMotorPos = self.locate(self.motors[Joints.Left_Thigh_Kick_Joint.value])
+        currTheta = math.atan2(self.CoM[1] - kickMotorPos[1], self.CoM[2] - kickMotorPos[2])
+        thetaError = targetTheta - currTheta
+        # print(math.degrees(targetTheta), math.degrees(currTheta), thetaError, self.CoM)
+        # print(self.CoM)
+        # print(math.degrees(self.motors[22].target), math.degrees(self.motors[22].target), math.degrees(self.motors[17].target), math.degrees(self.motors[19].target))
+        self.PID.setError(thetaError)
+        newTarget = self.PID.calculate()
+        
+        self.motors[22].target = -newTarget
+        self.motors[24].target = -newTarget
+        self.motors[17].target = newTarget
+        self.motors[19].target = newTarget
+        return thetaError
+    
+    def balanceZ(self):
+        self.IMUBalance()
+        # targetZ = 88
+        # zError = targetZ - self.CoM[2]
+        # target = 0.11
+        staticCoM = [-5.7919215528026395, -478.1476301728874, 77.13638385800057]
+        targetZ = staticCoM[2]
+        curZ = self.CoM[2]
         staticKickLoc = [93.54, -209.39, 41.53]
         targetTheta = math.atan2(staticCoM[1] - staticKickLoc[1], staticCoM[2] - staticKickLoc[2])
         kickMotorPos = self.locate(self.motors[Joints.Left_Thigh_Kick_Joint.value])

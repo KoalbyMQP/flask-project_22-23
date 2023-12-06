@@ -21,7 +21,7 @@ class Motor(ABC):
 
 
 class SimMotor(Motor):
-    def __init__(self, motor_id, client_id, handle, pidGains, twist, mass, home):
+    def __init__(self, motor_id, client_id, handle, pidGains, twist, M):
         self.handle = handle
         # super().__init__(self, motor_id) # idk why this doesn't work/how to make it work
         self.motor_id = motor_id
@@ -30,8 +30,7 @@ class SimMotor(Motor):
         self.name = ""
 
         self.twist = twist
-        self.mass = mass
-        self.home = np.array(home)
+        self.M = M
         self.theta = None
 
         #Should we put this in a Controller Object? Then have the motor have a controller assigned to it?
