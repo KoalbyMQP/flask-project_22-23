@@ -133,7 +133,7 @@ class SimRobot(Robot):
         self.chain = self.chain_init()
         self.links = self.links_init()
         self.limbs = self.limbs_init()
-        self.PID = PID(0.3,0.1,0)
+        self.PID = PID(0.25,0.1,0)
 
         # Placeholder need to make this set up the links
     def chain_init(self):
@@ -328,23 +328,55 @@ class SimRobot(Robot):
         # print(thetaList)
         location = mr.FKinSpace(M,slist,thetaList)
         return location[0:3,3]
-        
-    def IMUBalance(self):
+    
+    def locatePolygon(self):
+        slist = []
+        thetaList = []
+        locations = []
+        rightAnkleM = [[1,0,0,-43.49],[0,1,0,659.84],[0,0,1,70.68],[1,0,0,0]]
+        leftAnkleM = [[1,0,0,43.49],[0,1,0,659.84],[0,0,1,70.68],[1,0,0,0]]
+        rightAnkleMotor = self.motors[Joints.Right_Ankle_Joint.value]
+        leftAnkleMotor = self.motors[Joints.Left_Ankle_Joint.value]
+        Ms = [rightAnkleM, leftAnkleM]
+        ankleMotors = [rightAnkleMotor, leftAnkleMotor]
+        for i in range(len(ankleMotors)):
+            motor = ankleMotors[i]
+            M = Ms[i]
+            slist.append(motor.twist)
+            thetaList.append(motor.theta)
+            next = self.chain[motor.name]
+            while next != "base":
+                slist.append(next.twist)
+                thetaList.append(next.theta)
+                next = self.chain[next.name]         
+            slist.reverse()
+            thetaList.reverse()
+            # print(thetaList)
+            locations.append(mr.FKinSpace(M,slist,thetaList)[0:3,3])
+        return locations
+    
+    def findSupportPolygon(self):
+        rightAnkle = self.locate(self.motors[Joints.Right_Ankle_Joint.value])
+        leftAnkle = self.locate(self.motors[Joints.Left_Ankle_Joint.value])
+        rightSole = rightAnkle*rightAnkleToSole #-43.49,659.84,70.68
+        leftSole = leftAnkle*leftAnkleToSole #-43.49,659.84,70.68
+        rightPolyCoords = rightSole[0:3,4]
+        leftPolyCoords = leftSole[0:3,4]
+
+    def IMUBalance(self, Xtarget, Ztarget):
         pitch = self.get_imu_data()[0]
         roll = self.get_imu_data()[1]
-        Xtarget = 0
-        Ytarget = 0
         Xerror = math.radians(Xtarget - pitch)
-        Yerror = math.radians(Ytarget - roll)
+        Zerror = math.radians(Ztarget - roll)
         self.motors[14].target += -(Xerror)
         self.motors[10].target += (Xerror)
-        self.motors[11].target += (Yerror)
+        self.motors[11].target += (Zerror)
 
     def balanceAngle(self):
-        self.IMUBalance()
         # targetZ = 88
         # zError = targetZ - self.CoM[2]
         # target = 0.11
+        # self.locate(self.motors[Joints.Left_Ankle_Joint.value])*ankleL_to_sole
         staticCoM = [-5.7919215528026395, -478.1476301728874, 77.13638385800057]
         staticKickLoc = [93.54, -209.39, 41.53]
         targetTheta = math.atan2(staticCoM[1] - staticKickLoc[1], staticCoM[2] - staticKickLoc[2])
@@ -361,6 +393,7 @@ class SimRobot(Robot):
         self.motors[24].target = -newTarget
         self.motors[17].target = newTarget
         self.motors[19].target = newTarget
+        self.IMUBalance(0, 0)
         return thetaError
     
     def balanceZ(self):

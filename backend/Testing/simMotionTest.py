@@ -5,7 +5,9 @@ from backend.Testing import inverseKinematics as IK
 from backend.KoalbyHumanoid.Robot import Joints
 from backend.LimbTrajectories.rightLegTraj import * # Old Traj Code, see bottom comment
 import matplotlib.pyplot as plt
-
+import matplotlib.animation as animation
+from matplotlib import style
+from backend.KoalbyHumanoid.Plotter import Plotter
 
 # Edit to declare if you are testing the sim or the real robot
 isSim = True
@@ -14,30 +16,30 @@ robot, client_id = initSim.setup() if isSim else initRobot.setup()
 
 print("Setup Complete")
 
-setPoints = [[0,  0], [math.radians(-90), math.radians(-90)], [0,  0]]
+setPoints = [[0,  0], [math.radians(-90), math.radians(-90)], [math.radians(0), math.radians(0)]]
 tj = trajPlanner.TrajPlannerNew(setPoints)
 traj = tj.getCubicTraj(10, 100)
+plotter = Plotter()
 
 robot.motors[1].target = math.radians(80)
 robot.motors[6].target = math.radians(-80)
 # robot.motors[3].target = math.radians(90)
 # robot.motors[8].target = math.radians(90)
 robot.motors[14].target = 0
+# robot.motors[17].target = math.radians(90)
+# robot.motors[22].target = math.radians(90)
 
 #robot.motors[17].target = math.radians(-45)
 #robot.motors[22].target = math.radians(45)
 prevTime = time.time()
 vrep.simxStartSimulation(client_id, operationMode=vrep.simx_opmode_oneshot)
 
-print(robot.locate(robot.motors[3]))
-
-
 #robot.motors[0].target = -math.radians(90)
 simStartTime = time.time()
 while time.time() - simStartTime < 5:
     time.sleep(0.01)
     robot.updateRobotCoM() 
-    robot.IMUBalance()
+    robot.IMUBalance(0,0)
     robot.moveAllToTarget()
 
 while True:
@@ -46,7 +48,11 @@ while True:
     startTime = time.time()
     for point in traj:
         time.sleep(0.01)
+        # print(robot.locatePolygon())
         robot.updateRobotCoM()
+        # plotting stuff
+        plotter.addPoint(robot.CoM)
+        # plotting stuff
         errorData.append(robot.balanceAngle())
         timeData.append(time.time() - simStartTime)
         #print(robot.motors[0].prevError, robot.motors[0].effort)
@@ -62,6 +68,9 @@ while True:
         while time.time() - startTime < point[0]:
             time.sleep(0.01)
             robot.updateRobotCoM() 
+            # plotting stuff
+            plotter.addPoint(robot.CoM)
+            # plotting stuff
             errorData.append(robot.balanceAngle())
             timeData.append(time.time() - simStartTime)
             #print(robot.motors[0].prevError, robot.motors[0].effort)
