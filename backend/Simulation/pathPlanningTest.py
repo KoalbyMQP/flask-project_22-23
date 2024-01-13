@@ -8,6 +8,7 @@
 # should be a corresponding call to simxFinish at the end!
 
 import sim
+import time
 
 print ('Program started')
 sim.simxFinish(-1) # just in case, close all opened connections

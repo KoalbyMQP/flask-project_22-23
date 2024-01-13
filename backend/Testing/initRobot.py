@@ -5,5 +5,5 @@ import serial.tools.list_ports as ports
 # for i in com_ports:
 #     print(i.device)  # returns 'COMx' / current COM port being used
 
-robot = RealRobot()  # inits real-world robot
-# shut down robot
+def initRobot():
+    return RealRobot()  # inits real-world robot

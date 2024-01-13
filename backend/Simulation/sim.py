@@ -1,6 +1,7 @@
 import platform
 import struct
 import sys
+sys.path.append("./")
 import os
 import ctypes as ct
 from backend.Simulation.simConst import *

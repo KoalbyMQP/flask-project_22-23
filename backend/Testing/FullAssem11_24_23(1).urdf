@@ -1,0 +1,1613 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="FullAssem11_24_23(1)">
+  <link
+    name="Chest">
+    <inertial>
+      <origin
+        xyz="-2.72803074967136E-07 -0.0543065160431135 0.0714150251945909"
+        rpy="0 0 0" />
+      <mass
+        value="0.64029960294455" />
+      <inertia
+        ixx="0.000590962829268444"
+        ixy="4.14384721879905E-09"
+        ixz="3.2922172431269E-10"
+        iyy="0.000836422381552821"
+        iyz="2.68450563812413E-05"
+        izz="0.0010383875051874" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Chest.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Chest.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="Neck">
+    <inertial>
+      <origin
+        xyz="-0.00133568814662726 0.00985144675022792 -6.93889390390723E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.00649329301930083" />
+      <inertia
+        ixx="8.11045126393521E-07"
+        ixy="8.80185496766053E-08"
+        ixz="-1.26345901359392E-22"
+        iyy="2.02635190148404E-06"
+        iyz="2.34669698449857E-22"
+        izz="2.2963278148473E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Neck.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Neck.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Neck"
+    type="revolute">
+    <origin
+      xyz="0 -0.0322 0.1241"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="Chest" />
+    <child
+      link="Neck" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="Head">
+    <inertial>
+      <origin
+        xyz="-0.00200671988802036 0.036554982690706 0.00520877255975843"
+        rpy="0 0 0" />
+      <mass
+        value="0.239554915923713" />
+      <inertia
+        ixx="0.0007306677769662"
+        ixy="5.53822524846684E-07"
+        ixz="9.3607640752129E-07"
+        iyy="0.00103100217478206"
+        iyz="3.31485215647541E-06"
+        izz="0.000540149625308639" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Head.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.309803921568627 0.309803921568627 0.309803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Head.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="HeadNod"
+    type="revolute">
+    <origin
+      xyz="0 0.02 0"
+      rpy="0 0 0" />
+    <parent
+      link="Neck" />
+    <child
+      link="Head" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LeftShoulder1">
+    <inertial>
+      <origin
+        xyz="0.0125529481362367 -8.32667268468867E-17 -0.0118389455837543"
+        rpy="0 0 0" />
+      <mass
+        value="0.0140678446368539" />
+      <inertia
+        ixx="8.21240153586408E-06"
+        ixy="2.14856548630299E-21"
+        ixz="1.58105960212864E-07"
+        iyy="9.33317543194503E-06"
+        iyz="-1.96257677413588E-22"
+        izz="3.08197977559324E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftShoulder1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftShoulder1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LeftShoulderRotator"
+    type="revolute">
+    <origin
+      xyz="0.0921 -0.076 0.073"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="Chest" />
+    <child
+      link="LeftShoulder1" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LeftShoulder2">
+    <inertial>
+      <origin
+        xyz="0.0182506564903031 -9.15321898831145E-09 -0.0254628107340338"
+        rpy="0 0 0" />
+      <mass
+        value="0.140657927661934" />
+      <inertia
+        ixx="4.07021637676376E-05"
+        ixy="-2.93191353233223E-12"
+        ixz="1.12626143571207E-06"
+        iyy="5.71560237740776E-05"
+        iyz="-6.37201939274838E-11"
+        izz="4.61336995957069E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftShoulder2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.149019607843137 0.149019607843137 0.149019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftShoulder2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LeftShoulderAbductor"
+    type="revolute">
+    <origin
+      xyz="0.0255 0 0.0145"
+      rpy="0 0 0" />
+    <parent
+      link="LeftShoulder1" />
+    <child
+      link="LeftShoulder2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LeftBicep">
+    <inertial>
+      <origin
+        xyz="0.066063361746256 0.000260860833726798 -0.0133582227568695"
+        rpy="0 0 0" />
+      <mass
+        value="0.205851516159739" />
+      <inertia
+        ixx="5.82898083844868E-05"
+        ixy="-1.08360355736893E-06"
+        ixz="1.70942064890419E-06"
+        iyy="8.50111845414385E-05"
+        iyz="6.48784550193543E-11"
+        izz="8.84026838363529E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftBicep.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.309803921568627 0.309803921568627 0.309803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftBicep.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LeftBicep"
+    type="revolute">
+    <origin
+      xyz="0.0479 0 -0.0261"
+      rpy="0 0 0" />
+    <parent
+      link="LeftShoulder2" />
+    <child
+      link="LeftBicep" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LeftForearm">
+    <inertial>
+      <origin
+        xyz="0.0671907632430228 -0.0107506242984827 -0.00980788448167125"
+        rpy="0 0 0" />
+      <mass
+        value="0.11679447280608" />
+      <inertia
+        ixx="3.99210564335281E-05"
+        ixy="2.41359157253242E-06"
+        ixz="2.93588669271989E-06"
+        iyy="4.89298705473847E-05"
+        iyz="1.10746167957636E-08"
+        izz="6.8258218697261E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftForearm.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftForearm.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LeftElbow"
+    type="revolute">
+    <origin
+      xyz="0.10888 0.0259 -0.01293"
+      rpy="0 0 0" />
+    <parent
+      link="LeftBicep" />
+    <child
+      link="LeftForearm" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LeftHand">
+    <inertial>
+      <origin
+        xyz="0.0525908246302221 -0.0236269130126755 0.000189641637956144"
+        rpy="0 0 0" />
+      <mass
+        value="0.0500444946709501" />
+      <inertia
+        ixx="1.02258385932759E-05"
+        ixy="1.01681666159367E-06"
+        ixz="2.32062714143418E-08"
+        iyy="3.5323181510016E-05"
+        iyz="-3.22717264148484E-08"
+        izz="4.38502157879998E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftHand.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftHand.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LeftWrist"
+    type="revolute">
+    <origin
+      xyz="0.10975 -0.0136 -0.00598"
+      rpy="0 0 0" />
+    <parent
+      link="LeftForearm" />
+    <child
+      link="LeftHand" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="RightShoulder1">
+    <inertial>
+      <origin
+        xyz="-0.012552948136237 8.32667268468867E-17 -0.0118389455837545"
+        rpy="0 0 0" />
+      <mass
+        value="0.0140678446368539" />
+      <inertia
+        ixx="8.21240153586409E-06"
+        ixy="-7.57594908428968E-22"
+        ixz="-1.58105960212867E-07"
+        iyy="9.33317543194503E-06"
+        iyz="-3.66027982056718E-22"
+        izz="3.08197977559324E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightShoulder1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightShoulder1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RightShoulderRotator"
+    type="revolute">
+    <origin
+      xyz="-0.0921 -0.076 0.073"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="Chest" />
+    <child
+      link="RightShoulder1" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="RightShoulder2">
+    <inertial>
+      <origin
+        xyz="-0.0182506564907917 9.1520780676202E-09 -0.0254628107326718"
+        rpy="0 0 0" />
+      <mass
+        value="0.140657927672914" />
+      <inertia
+        ixx="4.07021637710451E-05"
+        ixy="-2.93400904996502E-12"
+        ixz="-1.12626143375677E-06"
+        iyy="5.71560237790088E-05"
+        iyz="6.37231587261211E-11"
+        izz="4.61336995970706E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightShoulder2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.149019607843137 0.149019607843137 0.149019607843137 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightShoulder2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RightShoulderAbductor"
+    type="revolute">
+    <origin
+      xyz="-0.0255 0 0.0145"
+      rpy="0 0 0" />
+    <parent
+      link="RightShoulder1" />
+    <child
+      link="RightShoulder2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="RightBicep">
+    <inertial>
+      <origin
+        xyz="-0.0660633618285239 0.000259835190718524 -0.013358210241853"
+        rpy="0 0 0" />
+      <mass
+        value="0.205851515775609" />
+      <inertia
+        ixx="5.8289807890142E-05"
+        ixy="1.08622399479062E-06"
+        ixz="-1.70941478362391E-06"
+        iyy="8.5011184047322E-05"
+        iyz="-6.48450810474374E-11"
+        izz="8.84026837782072E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightBicep.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.309803921568627 0.309803921568627 0.309803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightBicep.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RightBicep"
+    type="revolute">
+    <origin
+      xyz="-0.0479 0 -0.0261"
+      rpy="0 0 0" />
+    <parent
+      link="RightShoulder2" />
+    <child
+      link="RightBicep" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="RightForearm">
+    <inertial>
+      <origin
+        xyz="-0.0671907956499288 -0.0110516908752477 -0.00980949376123001"
+        rpy="0 0 0" />
+      <mass
+        value="0.116794506636562" />
+      <inertia
+        ixx="3.99210471115715E-05"
+        ixy="-2.26389642941663E-06"
+        ixz="-2.93622464959138E-06"
+        iyy="4.89299578563674E-05"
+        iyz="-6.93049694896832E-08"
+        izz="6.82583346326194E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightForearm.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightForearm.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RightElbow"
+    type="revolute">
+    <origin
+      xyz="-0.10888 0.0259 -0.01293"
+      rpy="0 0 0" />
+    <parent
+      link="RightBicep" />
+    <child
+      link="RightForearm" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="RightHand">
+    <inertial>
+      <origin
+        xyz="-0.0525958246302181 -0.0241269130126773 0.000189641637958315"
+        rpy="0 0 0" />
+      <mass
+        value="0.0500444946709501" />
+      <inertia
+        ixx="1.02258385932759E-05"
+        ixy="-1.01681666159369E-06"
+        ixz="-2.32062714143391E-08"
+        iyy="3.5323181510016E-05"
+        iyz="-3.22717264148568E-08"
+        izz="4.38502157879998E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightHand.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightHand.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RightWrist"
+    type="revolute">
+    <origin
+      xyz="-0.109745000000005 -0.0136000000000018 -0.00598"
+      rpy="0 0 0" />
+    <parent
+      link="RightForearm" />
+    <child
+      link="RightHand" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="ChestMotors">
+    <inertial>
+      <origin
+        xyz="-0.000772204685581632 0.0128608190510978 0.0372458478100593"
+        rpy="0 0 0" />
+      <mass
+        value="0.127902068726786" />
+      <inertia
+        ixx="2.81468001146102E-05"
+        ixy="-2.16513575796989E-07"
+        ixz="-2.07409213399404E-13"
+        iyy="1.59070284478664E-05"
+        iyz="-1.85705094491214E-07"
+        izz="2.92176069337856E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/ChestMotors.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/ChestMotors.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="TorsoSide2Side"
+    type="revolute">
+    <origin
+      xyz="0 -0.00563 0"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="Chest" />
+    <child
+      link="ChestMotors" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="Torso">
+    <inertial>
+      <origin
+        xyz="-0.0185010546651731 -0.0503536180146845 -0.012846652508513"
+        rpy="0 0 0" />
+      <mass
+        value="0.0854897699579477" />
+      <inertia
+        ixx="2.89870356622442E-05"
+        ixy="-1.54652510951572E-09"
+        ixz="4.12215824073997E-11"
+        iyy="2.53161600628746E-05"
+        iyz="-9.80430149211517E-07"
+        izz="2.51855411942846E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Torso.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.309803921568627 0.309803921568627 0.309803921568627 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Torso.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="TorsoFront2Back"
+    type="revolute">
+    <origin
+      xyz="0.0196 0 0.0549"
+      rpy="0 0 0" />
+    <parent
+      link="ChestMotors" />
+    <child
+      link="Torso" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="Belly">
+    <inertial>
+      <origin
+        xyz="3.1622361635307E-07 -0.0125730722961993 -0.0253684667473353"
+        rpy="0 0 0" />
+      <mass
+        value="0.0479224243107301" />
+      <inertia
+        ixx="8.21085231381546E-05"
+        ixy="-4.94343664353207E-11"
+        ixz="-3.22125916921613E-10"
+        iyy="8.22753392130367E-05"
+        iyz="-7.62764287929007E-07"
+        izz="2.98151449317418E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Belly.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Belly.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="HipsRotate"
+    type="revolute">
+    <origin
+      xyz="-0.0185000000000004 -0.0731 -0.0010000000000069"
+      rpy="0 0 0" />
+    <parent
+      link="Torso" />
+    <child
+      link="Belly" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="BellyMotors">
+    <inertial>
+      <origin
+        xyz="0.000206835869531771 0.0148204646722136 0.0487379212642115"
+        rpy="0 0 0" />
+      <mass
+        value="0.259101231109662" />
+      <inertia
+        ixx="9.81075819507516E-05"
+        ixy="1.08490241878049E-06"
+        ixz="-4.0131420997476E-13"
+        iyy="6.71888108702343E-05"
+        iyz="-1.07635658335317E-06"
+        izz="0.000101920103255933" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/BellyMotors.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/BellyMotors.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="HipsSide2Side"
+    type="revolute">
+    <origin
+      xyz="0 -0.05699 -0.0729999999999931"
+      rpy="0 0 0" />
+    <parent
+      link="Belly" />
+    <child
+      link="BellyMotors" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="Pelvis">
+    <inertial>
+      <origin
+        xyz="-0.000203189057814473 -0.0597797381368343 -0.0179532182758207"
+        rpy="0 0 0" />
+      <mass
+        value="0.176859741362908" />
+      <inertia
+        ixx="8.51592152645856E-05"
+        ixy="-7.76415751339911E-06"
+        ixz="5.96681919707122E-08"
+        iyy="4.94007009798091E-05"
+        iyz="-4.12072603970871E-06"
+        izz="8.90017553690822E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Pelvis.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.698039215686274 0.698039215686274 0.698039215686274 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/Pelvis.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="HipsFront2Back"
+    type="revolute">
+    <origin
+      xyz="0 0 0.0692"
+      rpy="0 0 0" />
+    <parent
+      link="BellyMotors" />
+    <child
+      link="Pelvis" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="RightHip">
+    <inertial>
+      <origin
+        xyz="-0.0406968426294338 0.0193274940873767 -0.0245040703232613"
+        rpy="0 0 0" />
+      <mass
+        value="0.0747747286258346" />
+      <inertia
+        ixx="2.19953430894028E-05"
+        ixy="2.64020314123703E-07"
+        ixz="4.51149304224769E-07"
+        iyy="2.27062421754764E-05"
+        iyz="9.30208384616848E-08"
+        izz="1.45241126894524E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightHip.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightHip.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RightLegAbductor"
+    type="revolute">
+    <origin
+      xyz="-0.02254 -0.06099 0.00220000000000001"
+      rpy="0 0 0" />
+    <parent
+      link="Pelvis" />
+    <child
+      link="RightHip" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="RightHip2">
+    <inertial>
+      <origin
+        xyz="0.00614025271475619 -0.0200749516727758 -0.0177768736093279"
+        rpy="0 0 0" />
+      <mass
+        value="0.129770584688503" />
+      <inertia
+        ixx="4.27213711558905E-05"
+        ixy="-2.36778137437468E-11"
+        ixz="1.08507751639679E-06"
+        iyy="5.36930183988732E-05"
+        iyz="-1.03421538433455E-08"
+        izz="3.27976045376483E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightHip2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightHip2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RightLegRotator"
+    type="revolute">
+    <origin
+      xyz="-0.044 0.00269000000000003 -0.0129"
+      rpy="0 0 0" />
+    <parent
+      link="RightHip" />
+    <child
+      link="RightHip2" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="RightThigh">
+    <inertial>
+      <origin
+        xyz="0.0483909716730395 -0.135995115588889 0.00107648549141142"
+        rpy="0 0 0" />
+      <mass
+        value="0.11402108124913" />
+      <inertia
+        ixx="0.000164245054692267"
+        ixy="2.14265549739651E-05"
+        ixz="-1.077474953176E-06"
+        iyy="5.09223968186919E-05"
+        iyz="8.02446041006938E-06"
+        izz="0.000171801098355012" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightThigh.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightThigh.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RightKick"
+    type="revolute">
+    <origin
+      xyz="-0.0259 -0.021 -0.0035"
+      rpy="0 0 0" />
+    <parent
+      link="RightHip2" />
+    <child
+      link="RightThigh" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="RightShin">
+    <inertial>
+      <origin
+        xyz="0.0211557771040499 -0.120268835412806 0.00249376431291887"
+        rpy="0 0 0" />
+      <mass
+        value="0.512236282156809" />
+      <inertia
+        ixx="0.0012610260678569"
+        ixy="3.8857024312788E-07"
+        ixz="5.66657810604784E-08"
+        iyy="0.000151649709305299"
+        iyz="-2.62571462465028E-05"
+        izz="0.00119435600348577" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightShin.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightShin.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RightKnee"
+    type="revolute">
+    <origin
+      xyz="0.03121 -0.1839 0"
+      rpy="0 0 0" />
+    <parent
+      link="RightThigh" />
+    <child
+      link="RightShin" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="RightFoot">
+    <inertial>
+      <origin
+        xyz="-0.0227020904298665 -0.0231263763982644 0.0261987720625029"
+        rpy="0 0 0" />
+      <mass
+        value="0.057911562345983" />
+      <inertia
+        ixx="9.98357894720655E-05"
+        ixy="-9.94713014216531E-08"
+        ixz="2.46545856623216E-06"
+        iyy="0.000109383920182141"
+        iyz="4.28417732292195E-06"
+        izz="2.39479975046166E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightFoot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/RightFoot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="RightAnkle"
+    type="revolute">
+    <origin
+      xyz="0.04025 -0.23155 0"
+      rpy="0 0 0" />
+    <parent
+      link="RightShin" />
+    <child
+      link="RightFoot" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LeftHip">
+    <inertial>
+      <origin
+        xyz="0.0406943253236651 0.0193278002485859 -0.0245041044879391"
+        rpy="0 0 0" />
+      <mass
+        value="0.0747748300391001" />
+      <inertia
+        ixx="2.19954096852805E-05"
+        ixy="-2.66703095954938E-07"
+        ixz="-4.50770927173999E-07"
+        iyy="2.27062527398076E-05"
+        iyz="9.30445123045974E-08"
+        izz="1.45241247089552E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftHip.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftHip.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LeftLegAbductor"
+    type="revolute">
+    <origin
+      xyz="0.02254 -0.061 0.00220000000000001"
+      rpy="0 0 0" />
+    <parent
+      link="Pelvis" />
+    <child
+      link="LeftHip" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LeftHip2">
+    <inertial>
+      <origin
+        xyz="-0.00614016244142612 -0.02008370643484 -0.017776873611476"
+        rpy="0 0 0" />
+      <mass
+        value="0.12977058471952" />
+      <inertia
+        ixx="4.27213711595216E-05"
+        ixy="-2.36782714634206E-11"
+        ixz="-1.08475001766499E-06"
+        iyy="5.36930184120156E-05"
+        iyz="-1.03362870816743E-08"
+        izz="3.2797604547994E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftHip2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftHip2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LeftLegRotator"
+    type="revolute">
+    <origin
+      xyz="0.044 0.00270000000000001 -0.0129"
+      rpy="0 0 0" />
+    <parent
+      link="LeftHip" />
+    <child
+      link="LeftHip2" />
+    <axis
+      xyz="0 -1 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LeftThigh">
+    <inertial>
+      <origin
+        xyz="-0.0449379561888863 -0.136585733022063 0.000599476586374798"
+        rpy="0 0 0" />
+      <mass
+        value="0.103846529551129" />
+      <inertia
+        ixx="0.000147771792351122"
+        ixy="-1.68433326908085E-05"
+        ixz="-9.23766160123859E-07"
+        iyy="4.4787758214189E-05"
+        iyz="2.8755728004661E-06"
+        izz="0.000156684463281465" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftThigh.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftThigh.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LeftKick"
+    type="revolute">
+    <origin
+      xyz="0.0259 -0.021 -0.0035"
+      rpy="0 0 0" />
+    <parent
+      link="LeftHip2" />
+    <child
+      link="LeftThigh" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LeftShin">
+    <inertial>
+      <origin
+        xyz="-0.0211605420000383 -0.120278524086946 0.00249412799948822"
+        rpy="0 0 0" />
+      <mass
+        value="0.512236281983584" />
+      <inertia
+        ixx="0.00126102606724905"
+        ixy="-4.41030147695736E-08"
+        ixz="5.66657611481914E-08"
+        iyy="0.000151649709124046"
+        iyz="-2.62567929652406E-05"
+        izz="0.0011943560028782" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftShin.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftShin.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LeftKnee"
+    type="revolute">
+    <origin
+      xyz="-0.03121 -0.1839 0"
+      rpy="0 0 0" />
+    <parent
+      link="LeftThigh" />
+    <child
+      link="LeftShin" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="LeftFoot">
+    <inertial>
+      <origin
+        xyz="0.022698053310157 -0.0231364222992937 0.0262037814520439"
+        rpy="0 0 0" />
+      <mass
+        value="0.0579284361514952" />
+      <inertia
+        ixx="9.98170630608952E-05"
+        ixy="9.76686387450906E-08"
+        ixz="-2.46469438043308E-06"
+        iyy="0.000109372388143666"
+        iyz="4.28398427781842E-06"
+        izz="2.39472874829441E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftFoot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.501960784313725 0.501960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://FullAssem11_24_23(1)/meshes/LeftFoot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="LeftAnkle"
+    type="revolute">
+    <origin
+      xyz="-0.04025 -0.23155 0"
+      rpy="0 0 0" />
+    <parent
+      link="LeftShin" />
+    <child
+      link="LeftFoot" />
+    <axis
+      xyz="-1 0 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>
